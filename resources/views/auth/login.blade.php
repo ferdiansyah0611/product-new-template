@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('templates')
 @section('css')
     <title>Login Account</title>
 @endsection
@@ -77,6 +77,7 @@
                             </div>
                         </div>
                     </form>
+                    <a href="{{ route('login.provider', 'google') }}" class="btn btn-danger">{{ __('Google Sign in') }}</a>
                 </div>
             </div>
         </div>
