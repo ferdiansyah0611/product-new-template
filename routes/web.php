@@ -102,3 +102,7 @@ Route::get('/about/programming', 'DashboardController@programming')->name('about
 Route::get('/documentation', 'HomeController@spa');
 //Route::get('/{any}', 'HomeController@spa')->where('any', '.*');
 Route::get('/template', 'HomeController@templates');
+
+
+Route::get('redirect/{driver}', 'AuthController@redirectToProvider')->name('login.provider');
+Route::get('{driver}/callback', 'AuthController@handleProviderCallback')->name('login.callback');
