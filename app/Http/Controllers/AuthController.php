@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
  
 use Illuminate\Http\Request;
 use Validator,Redirect,Response;
+use Socialite;
 Use App\User;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
@@ -90,4 +91,29 @@ class AuthController extends Controller
         Auth::logout();
         return Redirect('login');
     }
+    public function redirectToProvider($driver)
+{
+    return Socialite::driver($driver)->redirect();
+}
+public function handleProviderCallback($driver)
+{
+    try {
+        $user = Socialite::driver($driver)->user();
+
+        $create = User::firstOrCreate([
+            'email' => $user->getEmail()
+        ], [
+            'socialite_name' => $driver,
+            'socialite_id' => $user->getId(),
+            'name' => $user->getName(),
+            'avatars' => $user->getAvatar(),
+            'email_verified_at' => now()
+        ]);
+
+        auth()->login($create, true);
+        return redirect($this->redirectPath());
+    } catch (\Exception $e) {
+        return redirect()->route('login');
+    }
+}
 }
