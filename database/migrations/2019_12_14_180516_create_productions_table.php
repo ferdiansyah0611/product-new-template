@@ -27,9 +27,13 @@ class CreateProductionsTable extends Migration
             $table->string('five_pictures')->nullable();
             $table->string('category_products')->nullable();
             $table->BigInteger('sold_out')->nullable();
+            $table->bigInteger('profits')->nullable();
+            $table->bigInteger('me', 255)->nullable();
             $table->string('size')->nullable();
             $table->string('status')->nullable();
             $table->boolean('count')->default('1');
+            $table->integer('month', 12)->nullable();
+            $table->integer('year', 12)->nullable();
             $table->timestamps();
         });
     }
