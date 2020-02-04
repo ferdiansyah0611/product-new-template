@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('templates')
 @section('header')
 @section('content')
 <form method="post" action="">@csrf

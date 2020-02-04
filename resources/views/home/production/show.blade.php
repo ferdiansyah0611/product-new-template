@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('templates')
 @section('css')
 <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Pangolin&display=swap" rel="stylesheet">
@@ -41,70 +41,70 @@
 
 @section('content')
 <div class="container">
-    <div class="row">
-<div class="col-xl-5 float-left card" style="border-radius: 0;box-shadow:none;">
+    <div class="row match-height">
+<div class="col-xl-5 float-left" style="border-radius: 0;box-shadow:none;">
+  <div class="card">
   <!-- Full-width images with number text -->
   <div class="mySlides">
     <div class="numbertext">1 / 5</div>
-      <img src="{{$production->main_pictures}}" class="item-img">
+      <img src="{{asset($production->main_pictures)}}" class="item-img">
   </div>
 @if($production->second_pictures == true)
   <div class="mySlides">
     <div class="numbertext">2 / 5</div>
-      <img src="{{$production->second_pictures}}" class="item-img">
+      <img src="{{asset($production->second_pictures)}}" class="item-img">
   </div>
 @endif
 @if($production->three_pictures == true)
   <div class="mySlides">
     <div class="numbertext">3 / 5</div>
-      <img src="{{$production->three_pictures}}" class="item-img">
+      <img src="{{asset($production->three_pictures)}}" class="item-img">
   </div>
 @endif
 @if($production->fourth_pictures == true)
   <div class="mySlides">
     <div class="numbertext">4 / 5</div>
-      <img src="{{$production->fourth_pictures}}" class="item-img">
+      <img src="{{asset($production->fourth_pictures)}}" class="item-img">
   </div>
 @endif
 @if($production->five_pictures == true)
   <div class="mySlides">
     <div class="numbertext">5 / 5</div>
-      <img src="{{$production->five_pictures}}" class="item-img">
+      <img src="{{asset($production->five_pictures)}}" class="item-img">
   </div>
 @endif
   <!-- Next and previous buttons -->
   <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
   <a class="next" onclick="plusSlides(1)">&#10095;</a>
-
   <div class="dropdown-divider"></div>
-
   <!-- Thumbnail images -->
   <div class="row" style="width: 500px;">
     <div class="column">
-      <img class="demo cursor" src="{{$production->main_pictures}}" style="width:100%" onclick="currentSlide(1)" alt="The Woods">
+      <img class="demo cursor" src="{{asset($production->main_pictures)}}" style="width:100%" onclick="currentSlide(1)" alt="The Woods">
     </div>
     @if($production->second_pictures == true)
     <div class="column">
-      <img class="demo cursor" src="{{$production->second_pictures}}" style="width:100%" onclick="currentSlide(2)" alt="Cinque Terre">
+      <img class="demo cursor" src="{{asset($production->second_pictures)}}" style="width:100%" onclick="currentSlide(2)" alt="Cinque Terre">
     </div>
     @endif
     @if($production->three_pictures == true)
     <div class="column">
-      <img class="demo cursor" src="{{$production->three_pictures}}" style="width:100%" onclick="currentSlide(3)" alt="Mountains and fjords">
+      <img class="demo cursor" src="{{asset($production->three_pictures)}}" style="width:100%" onclick="currentSlide(3)" alt="Mountains and fjords">
     </div>
     @endif
     @if($production->fourth_pictures == true)
     <div class="column">
-      <img class="demo cursor" src="{{$production->fourth_pictures}}" style="width:100%" onclick="currentSlide(4)" alt="Northern Lights">
+      <img class="demo cursor" src="{{asset($production->fourth_pictures)}}" style="width:100%" onclick="currentSlide(4)" alt="Northern Lights">
     </div>
     @endif
     @if($production->five_pictures == true)
     <div class="column">
-      <img class="demo cursor" src="{{$production->five_pictures}}" style="width:100%" onclick="currentSlide(5)" alt="Nature and sunrise">
+      <img class="demo cursor" src="{{asset($production->five_pictures)}}" style="width:100%" onclick="currentSlide(5)" alt="Nature and sunrise">
     </div>
     @endif
   </div>
   </div>
+  </div>{{--./col-xl-5 float-left--}}
   <div class="col-xl-7 float-left card" style="border-radius: 0;box-shadow:none;">
     <p style="font-weight: bolder;font-size: 17px;padding-top: 10px;">{{base64_decode($production->name_products)}}</p>
     <div style="width: 100%;padding-left: 10px;background-color: #dedede;">
@@ -114,16 +114,11 @@
   <p><span style="padding-right: 20px;color: #757575;">Balance</span> <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/assets/a507d0e185dbd56e388652d8d8da845d.png"> Buy and get cashback up to Rp. 10.000</p>
   <p><span style="padding-right: 20px;color: #757575;">Delivery</span> <i class="fas fa-shipping-fast" style="padding-right: 2px;
     font-size: 21px;"></i> Free shipping with a minimum purchase Rp100.000</p>
-    <form method="POST" action="{{route('productions.buy', $production->id)}}">@csrf
-  <p><span style="padding-right: 20px;color: #757575;">Amount</span> 
+  <form method="get" action="{{route('productions.payment')}}">
+    <p><span style="padding-right: 20px;color: #757575;">Amount</span> 
     <input type="number" name="remaining" class="form-control col-xl-3" min="1" max="{{$production->remaining_products}}" maxlength="{{$production->remaining_products}}" style="display: inline;"> <span style="padding-left: 10px;">remaining {{$production->remaining_products}} units</span>
-  </p>
-  <input type="hidden"name="add" value="{{$production->id}}">
-<input type="hidden" name="prices" value="{{$production->price}}">
-
-<input type="hidden" name="buy_products" value="{{$production->id}}">
-          <input type="hidden" name="price" value="{{$production->price}}">
-          <input type="hidden" name="stock" value="{{$production->remaining_products}}">
+    </p>
+  <input type="hidden" name="buy_products" value="{{$production->id}}">
   <p><button class="btn btn-outline-danger" name="added" style="padding: 10px;border-radius: 0;"><i class="fas fa-cart-plus"></i>Add To Cart</button>
   <button type="submit" class="btn btn-danger" name="buy" style="padding: 10px;border-radius: 0;">Buy Now</button></p>
   </form>
@@ -134,22 +129,25 @@
     <button class="btn btn-outline-danger social-btn"><i class="far fa-heart"></i> Favorite (7)</button>
   </p>
   </div>
-  </div>
+  </div>{{--./col-xl-7 float-left card--}}
+</div>
 <div class="col-md-12 card">
       <div class="card-body" style="font-family: 'Cuprum-Bold';">
-        <div style="border-right: 2px solid black">
+        <div>
         @php
             $data_user = DB::table('users')->where('id', $production->user_id)->get();
             foreach($data_user as $user){
             $data_products = DB::table('productions')->where('user_id', $production->user_id)->count('count');
-              echo "<img style='width: 15%;float:left;padding-top: 19px;' src='".$user->avatars."'>";
-              echo "<div class='float-left' style='margin-left:10px;border-right: 3px solid #c7c7c796;padding: 15px;'>";
+              echo "<div class='col-xl-6' style='border-right: 3px solid #c7c7c796;'>";
+              echo "<img style='float:left;padding-top: 19px;width: 100px;height: 115px;' src='".asset($user->avatars)."'>";
+              echo "<div class='col-xl-6' style='margin-left:10px;padding: 15px;float:left;'>";
               echo "<p>".$user->name.", live in ".$user->locate."</p>";
               echo "<p>".$user->description."</p>";
               echo "<button class='btn btn-danger'><i class='far fa-envelope'></i>Chat Now</button>";
               echo "<button class='btn btn-outline-secondary'>View Store</button>";
               echo "</div>";
-              echo "<div class='float-left' style='margin-left:10px;border-right: 3px solid #c7c7c796;padding: 15px;'>";
+              echo "</div>";
+              echo "<div class='col-xl-6' style='padding: 15px;'>";
               echo "<p>Join in <span style='color: #d0011b;'>".Carbon\Carbon::parse($user->created_at)->diffForHumans()."</span></p>";
               echo "<p>Product <span style='color: #d0011b;'>".$data_products."</span></p>";
               echo "<p>Presentation reply <span style='color: #d0011b;'>99%</span></p>";
@@ -159,29 +157,39 @@
       </div>
       </div>
     </div>
-<div class="col-xl-12 card" style="margin-top: 17px;">
-  <div class="card-header" style="text-decoration: underline;font-family: 'Pangolin', cursive;font-size: 20px;font-weight: bolder;background-color: white;padding: 10px;">Descriptions Products</div>
-    <p style="font-family: 'Cuprum-Regular';">{!!Crypt::decrypt($production->description_products)!!}</p>
-    <div class="dropdown-divider"></div>
-    <div class="card-header" style="text-decoration: underline;font-family: 'Pangolin', cursive;font-size: 20px;font-weight: bolder;background-color: white;padding: 10px;">Details Products</div>
+<div class="row match-height" style="margin-top: 17px;">
+<div class="col-xl-8">
+  <div class="card-header" style="text-decoration: underline;font-family: 'Pangolin', cursive;font-size: 20px;font-weight: bolder;background-color: white;padding: 10px;">Details Products</div>
+  <div class="card-body">
+  </div>
 </div>
-<div class="col-xl-12 bg-info float-left" style="margin-top: 10px;">
-      <div class="card-header justify-content-center" style="padding: 10px;">
+<div class="col-xl-4">
+  <div class="card-header" style="text-decoration: underline;font-family: 'Pangolin', cursive;font-size: 20px;font-weight: bolder;background-color: white;padding: 10px;">Details Products</div>
+  <div class="card-body">
+    
+  </div>
+</div>
+</div>
+<div class="col-xl-12 float-left" style="margin-top: 10px;">
+  <div class="card-primary">
+  <div class="card-header">
+    <a class="heading-elements-toggle"><i class="icon-ellipsis font-medium-3"></i></a>
+    <div class="heading-elements">
+      <ul class="list-inline mb-0">
+        <li><a data-action="reload" id="click"><i class="icon-reload"></i></a></li>
+        <li><a data-action="expand"><i class="icon-expand2"></i></a></li>
+      </ul>
+    </div>
+  </div>
+      <div class="card-body" style="padding: 10px;">
         @auth
-      <form action="{{route('productions.question')}}" method="POST" enctype="multipart/form-data">@csrf
+      <form class="col-md-6 col-xl-6" action="{{route('productions.question')}}" method="POST" enctype="multipart/form-data">@csrf
         <input class="form-control" type="hidden" name="user_id" value="{{auth()->user()->id}}">
-        <input class="form-control" type="hidden" name="name" value="{{auth()->user()->name}}">
+        <input class="form-control" type="hidden" name="name" value="{{auth()->user()->name}}"> 
         <input class="form-control" type="hidden" name="production_id" value="{{$production->id}}">
         <input class="form-control" type="hidden" name="count" value="1">
-        <div class="input-group col-md-6">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="inputGroupFileAddon02">Pictures 1</span>
-        </div><!--./input-group-prepend-->
-        <div class="custom-file">
-          <input type="file" name="img" accept="image/*" class="custom-file-input">
-          <label class="custom-file-label">Choose images file</label>
-        </div><!--./custom-file-->
-        <div class="float-left col-md-3">
+        <div class="input-group">
+          <input type="file" name="img" accept="image/*">
       <select id="inputState" class="form-control" name="star">
         <option value="1" selected>1 Star</option>
         <option value="2">2 Star</option>
@@ -189,27 +197,15 @@
         <option value="4">4 Star</option>
         <option value="5">5 Star</option>
       </select>
-    </div><!--./float-left col-md-3-->
       </div><!--./input-group col-md-6-->
-    <div class="float-left col-md-6" style="text-align: center;">
     
         <textarea class="form-control" name="comment" style="width: 100%;
     margin: 15px auto;
     height: 80px;"></textarea>
         <button type="submit" class="btn btn-primary" style="padding:5px;margin-top:10px;">Comments Now</button>
-    </div><!--./float-left col-md-6-->
       </form>
       @endauth
-      <div class="col-xl-6 float-right" style="margin-top: -40px;text-align:center;display:inline;">
-      <p style="font-weight: bolder;font-size:larger">Filtering Comment</p>
-      <div class="dropdown-divider"></div>
-        <button class="btn-star" type="submit">1 Star</button></form>
-        <button class="btn-star" type="submit">2 Star</button></form>
-        <button class="btn-star" type="submit">3 Star</button></form>
-        <button class="btn-star" type="submit">4 Star</button></form>
-        <button class="btn-star" type="submit">5 Star</button></form>
-      </div><!--./col-xl-6 float-right-->
-      </div><!--./card-header-->
+      </div><!--./card-body-->
       @guest
       <div class="alert alert-danger alert-dismissible fade show" role="alert">
       <strong>Whoops!</strong> If you want comments you must login or registration.
@@ -218,16 +214,21 @@
       </button>
       </div>
       @endguest
-      <div class="card-body no-padding">
+      <div class="no-padding" id="displayRef">
+        
         @foreach($production->question as $q)
       <div class="col-xl-12 float-left" style="font-family: 'Cuprum-Bold';margin-top:10px;" id="productsid{{$production->id}}">
         <div class="col-xl-1 float-left" style="padding:0px;">
-          @php
+          <?php
           $user_data = DB::table('users')->where('id', $q->user_id)->get();
           foreach($user_data as $data){
-          echo "<img src='$data->avatars' style='width: 100%;float: left;border-radius: 50%;margin: auto;height: 100px;'>";
+          if($data->avatars == null)
+          echo "<img src='".asset('user-default.png')."' style='width: 100%;float: left;border-radius: 50%;margin: auto;height: 96px;'>";
+          }
+          if($data->avatars == true){
+          echo "<img src='".asset($data->avatars)."' style='width: 100%;float: left;border-radius: 50%;margin: auto;height: 96px;'>";
         }
-          @endphp
+          ?>
         </div><!--./col-xl-1-->
         <div class="col-xl-11 float-left">
         {{$q->name}} 
@@ -262,7 +263,7 @@
         <i class="fas fa-star stars-color"></i>
         <i class="fas fa-star stars-color"></i>@endif
       
-        <span class="float-right">{{$q->created_at}}</span>
+        <span class="float-right">{{$q->created_at}}<p id="gfg"></p> </span>
       
         <div style="text-align: center;">
           <p class="text-comment">{{$q->comment}}</p>
@@ -284,13 +285,11 @@
       </div>
 
       </div><!--./col-xl-11-->
-    
-        <div class="dropdown-divider"></div>
         @endforeach
       </div><!--./card-body-->
     </div>
+  </div><!-- card -->
     </div>
-</div>
 
 @foreach($production->question as $q)
 <!-- Modal -->
@@ -338,5 +337,22 @@ function showSlides(n) {
   slides[slideIndex-1].style.display = "block";
   dots[slideIndex-1].className += " active";
 }
+</script>
+<script type="text/javascript">
+  $.get("https://ipinfo.io", function(response) { 
+            $("#gfg").html(response.city); ; 
+        }, "json") 
+</script>
+<script type="text/javascript">
+$(function(){
+$.ajaxSetup({
+  headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  }
+});//end setup
+$('#click').click(function(){
+  $('#displayRef').load('{{ url('/productions/'.$production->id.'/views/ref')}}');
+});
+});
 </script>
 @endsection

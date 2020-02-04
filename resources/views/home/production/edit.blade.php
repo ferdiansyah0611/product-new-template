@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('templates')
 @section('content')
 <div class="col-md-8 card mx-auto" style="font-family: 'times new roman";>
 	<div class="card-header">Edit</div>

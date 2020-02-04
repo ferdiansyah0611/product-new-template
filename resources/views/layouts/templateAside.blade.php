@@ -74,7 +74,7 @@
           </li>@endif
           @endauth
           <li class="nav-item">
-            <a href="{{route('production.index')}}" class="nav-link">
+            <a href="{{route('productions.index')}}" class="nav-link">
               <i class="nav-icon fas fas fa-file-alt  color-icon"></i>
               <p>
                 All Products
@@ -93,7 +93,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{route('production.create')}}" class="nav-link left-icon">
+                <a href="{{route('productions.create')}}" class="nav-link left-icon">
                   <i class="fas fa-crosshairs nav-icon"></i>
                   <p>Recent</p>
                 </a>
@@ -128,7 +128,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{route('production.create')}}" class="nav-link left-icon">
+                <a href="{{route('productions.create')}}" class="nav-link left-icon">
                   <i class="fas fa-plus-square nav-icon"></i>
                   <p>New Products</p>
                 </a>
@@ -140,7 +140,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{route('production.draft')}}" class="nav-link left-icon">
+                <a href="{{route('productions.draft')}}" class="nav-link left-icon">
                   <i class="fas fa-save nav-icon"></i>
                   <p>Draft Products</p>
                 </a>

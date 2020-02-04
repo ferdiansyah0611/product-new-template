@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('templates')
 @section('css')
 <link rel="stylesheet" type="text/css" href="{{asset('/vendor/datatables/media/css/jquery.dataTables.css')}}">
 @endsection
@@ -23,10 +23,8 @@
     </thead>
     @foreach($product as $p)
     <tbody>
-    <td>
-<?php echo $name = base64_decode($p->name_products); ?>
-    	</td>
-    <td>Rp. <?php echo $price = base64_decode($p->price); ?></td>
+    <td>{{base64_decode($p->name_products)}}</td>
+    <td>Rp. {{$p->price}}</td>
     <td>{{$p->remaining_products}}</td>
     <td>{{$p->category_products}}</td>
     <td>{{$p->status}}</td>
@@ -65,7 +63,7 @@
                         <label class="col-form-label">Name Products</label>
                         <input type="text" name="update_name" value="{{base64_decode($p->name_products)}}" class="form-control">
                         <label class="col-form-label">Price</label>
-                        <input type="text" name="update_price" value="{{base64_decode($p->price)}}" class="form-control">
+                        <input type="text" name="update_price" value="{{$p->price}}" class="form-control">
                         </div>
                         <div class="form-group col-md-6 float-right">
                         <label class="col-form-label">Remaining</label>
@@ -74,7 +72,6 @@
                         <select name="update_category" class="form-control">
                                 <option value="{{$p->category_products}}" selected>{{$p->category_products}}</option>
                                 @foreach($category as $c)
-                                
                                 <option value="{{$c->name}}">{{$c->name}}</option>@endforeach
                         </select>
                         </div>

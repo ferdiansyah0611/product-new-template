@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('templates')
 @section('content')
 <div class="col-xl-8 mx-auto card">
 <div class="card-header">{{$profile->name}}</div>

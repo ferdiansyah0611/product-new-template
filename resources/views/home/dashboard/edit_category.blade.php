@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('templates')
 @section('content')
 <div class="col-md-4 card mx-auto">
     <div class="card-body">

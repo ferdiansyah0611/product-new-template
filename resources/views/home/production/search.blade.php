@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('templates')
 @section('content')
 @if($search == true)
 <div class="container">

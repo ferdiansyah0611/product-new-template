@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('templates')
 @section('css')
 <link rel="stylesheet" type="text/css" href="{{asset('/vendor/datatables/media/css/jquery.dataTables.css')}}">
 @endsection

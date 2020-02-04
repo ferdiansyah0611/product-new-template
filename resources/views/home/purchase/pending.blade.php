@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('templates')
 @section('content')
 <div class="col-md-12 card mx-auto table-responsive">
     <div class="card-header">Pending My Production</div>

@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('templates')
 @section('content')
 <div class="mx-auto">
     <div class="row">
@@ -8,12 +8,15 @@
               <h3 class="card-title">
                 <i class="fas fa-th mr-1"></i>Request Product
               </h3>
-              <div class="card-tools">
-                <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                </button>
-                <button type="button" class="btn bg-info btn-sm" data-card-widget="remove"><i class="fas fa-times"></i>
-                </button>
-              </div>
+              <a class="heading-elements-toggle"><i class="icon-ellipsis font-medium-3"></i></a>
+              <div class="heading-elements">
+            <ul class="list-inline mb-0">
+              <li><a data-action="collapse"><i class="icon-minus4"></i></a></li>
+              <li><a data-action="reload"><i class="icon-reload"></i></a></li>
+              <li><a data-action="expand"><i class="icon-expand2"></i></a></li>
+              <li><a data-action="close"><i class="icon-cross2"></i></a></li>
+            </ul>
+          </div>
             </div>
             <div class="card-body">
             <!--table--->

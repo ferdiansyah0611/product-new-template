@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('templates')
 @section('css')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <style type="text/css">
@@ -28,12 +28,20 @@
       <div class="col-md-12">
           @foreach($category as $c)
       <div class="card shadow">
-      <div class="card-header custom-header-card"> {{$c->name}} <span class="float-right">
-        <form action="{{route('productions.category')}}">
+      <div class="card-header"> {{$c->name}}
+    <a class="heading-elements-toggle"><i class="icon-ellipsis font-medium-3"></i></a>
+              <div class="heading-elements">
+            <ul class="list-inline mb-0">
+              <li><form action="{{route('productions.category')}}">
             <input type="hidden" value="{{$c->name}}" name="category">
         <button type="submit" class="btn-outline-primary" style="font-size:12px;">More Products...</button>
-        </form>
-      </span></div>
+        </form></li>
+              <li><a data-action="collapse"><i class="icon-minus4"></i></a></li>
+              <li><a data-action="reload"><i class="icon-reload"></i></a></li>
+              <li><a data-action="expand"><i class="icon-expand2"></i></a></li>
+              <li><a data-action="close"><i class="icon-cross2"></i></a></li>
+            </ul>
+          </div></div>
       <div class="card-body custom-body-card">
           @foreach($product as $content)
           @if($content->category_products == $c->name)
@@ -43,7 +51,7 @@
               <?php 
               $name = Crypt::encrypt($content->name_products);
               $views = base64_encode($content->name_products);
-              echo "/productions/".$content->id."/views/".$name."/".$views;
+              echo url("/productions/".$content->id."/views");
               ?>">{{base64_decode($content->name_products)}}</a>
               <img src="{{asset($content->main_pictures)}}" class="img-col-xl-3">
               <div class="card-footer custom-card-footer">

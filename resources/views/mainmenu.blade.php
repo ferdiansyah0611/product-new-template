@@ -7,88 +7,86 @@
       <!-- main menu content-->
       <div class="main-menu-content">
         <ul id="main-menu-navigation" data-menu="menu-navigation" class="navigation navigation-main">
-          <li class=" nav-item"><a href="index.html"><i class="icon-home3"></i><span data-i18n="nav.dash.main" class="menu-title">Dashboard</span><span class="tag tag tag-primary tag-pill float-xs-right mr-2">2</span></a>
+          @auth
+          <li class="nav-item">
+            <a href="">
+            <i class="icon-home3"></i><span class="menu-title">{{ __('menu.dashboard') }}</span>
+            <span class="tag tag tag-primary tag-pill float-xs-right mr-2">2</span>
+            </a>
             <ul class="menu-content">
-              <li class="active"><a href="{{route('dashboard.index')}}" class="menu-item">Dashboard</a>
+              <li class="active"><a href="{{route('dashboard.index')}}" class="menu-item">{{ __('menu.dashboard') }}</a>
               </li>
-              <li><a href="{{route('dashboard.manageusers')}}" class="menu-item">User Manage</a>
-                <li><a href="{{route('dashboard.managedb')}}" class="menu-item">Database Manage</a>
+              <li><a id="manageUser" href="javascript:void(0)" class="menu-item">{{ __('menu.usermanage') }}</a>
+                <li><a href="{{route('dashboard.managedb')}}" class="menu-item">{{ __('menu.dbmanage') }}</a>
               </li>
             </ul>
           </li>
-          <li class=" nav-item"><a href="#"><i class="icon-briefcase4"></i><span data-i18n="nav.project.main" class="menu-title">Pages</span></a>
+          @endauth
+          <li class=" nav-item"><a href="#"><i class="icon-briefcase4"></i><span class="menu-title">{{ __('menu.pages') }}</span></a>
             <ul class="menu-content">
-            <li><a href="{{url('/')}}" class="menu-item">All Pages</a>
+            <li><a href="{{url('/')}}" class="menu-item">{{ __('menu.allpages') }}</a>
               </li>
-              <li><a href="#" data-i18n="nav.error_pages.main" class="menu-item">Category</a>
+              <li><a href="#" class="menu-item">{{ __('menu.category') }}</a>
                 <ul class="menu-content">
-                  <li><a href="error-400.html" data-i18n="nav.error_pages.error_400" class="menu-item">Error 400</a>
-                  </li>
-                  <li><a href="error-401.html" data-i18n="nav.error_pages.error_401" class="menu-item">Error 401</a>
-                  </li>
-                  <li><a href="error-403.html" data-i18n="nav.error_pages.error_403" class="menu-item">Error 403</a>
-                  </li>
-                  <li><a href="error-404.html" data-i18n="nav.error_pages.error_404" class="menu-item">Error 404</a>
-                  </li>
-                  <li><a href="error-500.html" data-i18n="nav.error_pages.error_500" class="menu-item">Error 500</a>
-                  </li>
+                  <?php 
+                  $category = DB::table('categories')->orderBy('name', 'ASC')->get();
+                  foreach($category as $c){
+                    echo "<li><a href='".url('/')."/productions/category/view-for?category=".$c->name."' class='menu-item'>".$c->name."</a></li>";
+                  }?>
                 </ul>
               </li>
             </ul>
           </li>
-          <li class=" nav-item"><a href="#"><i class="icon-ios-albums-outline"></i><span data-i18n="nav.cards.main" class="menu-title">Purchase</span></a>
+          @auth
+          <li class=" nav-item"><a href="#"><i class="icon-ios-albums-outline"></i><span class="menu-title">{{ __('menu.purchase') }}</span></a>
             <ul class="menu-content">
-              <li><a href="{{route('production.create')}}" class="menu-item">Latest</a>
+              <li><a href="{{route('productions.create')}}" class="menu-item">{{ __('menu.latest') }}</a>
               </li>
-              <li><a href="{{route('purchase.pending')}}" class="menu-item">Pending</a>
+              <li><a href="{{route('purchase.pending')}}" class="menu-item">{{ __('menu.pending') }}</a>
               </li>
-              <li><a href="{{route('purchase.receive')}}" class="menu-item">Receive</a>
+              <li><a href="{{route('purchase.receive')}}" class="menu-item">{{ __('menu.receive') }}</a>
               </li>
             </ul>
           </li>
-          <li class=" nav-item"><a href="#"><i class="icon-whatshot"></i><span data-i18n="nav.advance_cards.main" class="menu-title">Products</span></a>
+          <li class=" nav-item"><a href="#"><i class="icon-android-cart"></i><span class="menu-title">{{ __('menu.products') }}</span></a>
             <ul class="menu-content">
-              <li><a href="{{route('production.create')}}" class="menu-item">New Products</a>
+              @if(Auth()->user()->role == '2')<li><a href="{{route('productions.create')}}" class="menu-item">{{ __('menu.newproducts') }}</a></li>@endif
+              <li><a href="{{route('productions.manage')}}" class="menu-item">{{ __('menu.manageproducts') }}</a></li>
+              <li><a href="{{route('productions.request')}}" class="menu-item">{{ __('menu.requestproducts') }}</a></li>
+            </ul>
+          </li>
+          <li class=" nav-item"><a href="#"><i class="icon-android-chat"></i><span class="menu-title">{{ __('menu.messages') }}</span></a>
+            <ul class="menu-content">
+              <li><a href="{{route('messages.create')}}" class="menu-item">{{ __('menu.createmessages') }}</a>
               </li>
-              <li><a href="{{route('productions.manage')}}" class="menu-item">Manage Products</a>
+              <li><a href="{{route('messages.index')}}" class="menu-item">{{ __('menu.inbox') }}</a>
               </li>
-              <li><a href="{{route('productions.request')}}" class="menu-item">Request Products</a>
+              <li><a href="" class="menu-item">{{ __('menu.send') }}</a>
+              </li>
+              <li><a href="{{url('/messages/archives')}}" class="menu-item">{{ __('menu.archive') }}</a>
               </li>
             </ul>
           </li>
-          <li class=" nav-item"><a href="#"><i class="icon-compass3"></i><span data-i18n="nav.content.main" class="menu-title">Messages</span></a>
+          <li class=" nav-item"><a href="#"><i class="icon-android-settings"></i><span class="menu-title">{{ __('menu.setting') }}</span></a>
             <ul class="menu-content">
-              <li><a href="{{route('messages.create')}}" class="menu-item">Create Messages</a>
+              <li><a href="{{route('setting.account')}}" class="menu-item">{{ __('menu.account') }}</a>
               </li>
-              <li><a href="{{route('messages.index')}}" class="menu-item">Inbox</a>
+              <li><a href="{{route('setting.display')}}" class="menu-item">{{ __('menu.display') }}</a>
               </li>
-              <li><a href="" class="menu-item">Send</a>
+              <li><a href="{{route('setting.history')}}" class="menu-item">{{ __('menu.historylogin') }}</a>
               </li>
-              <li><a href="{{url('/messages/archives')}}" class="menu-item">Archive</a>
+              <li><a href="component-collapse.html" class="menu-item">{{ __('menu.notif') }}</a>
+              </li>
+              <li><a href="component-dropdowns.html" class="menu-item">{{ __('menu.pay') }}</a>
               </li>
             </ul>
           </li>
-          <li class=" nav-item"><a href="#"><i class="icon-grid2"></i><span data-i18n="nav.components.main" class="menu-title">Setting</span></a>
-            <ul class="menu-content">
-              <li><a href="{{route('setting.account')}}" class="menu-item">Account</a>
-              </li>
-              <li><a href="{{route('setting.display')}}" class="menu-item">Display</a>
-              </li>
-              <li><a href="{{route('setting.history')}}" class="menu-item">History Login</a>
-              </li>
-              <li><a href="component-collapse.html" class="menu-item">Notification</a>
-              </li>
-              <li><a href="component-dropdowns.html" class="menu-item">Payment</a>
-              </li>
-            </ul>
+          @endauth
+          <li class=" navigation-header"><span data-i18n="nav.category.support">{{ __('menu.support') }}</span><i data-toggle="tooltip" data-placement="right" data-original-title="Support" class="icon-ellipsis icon-ellipsis"></i>
           </li>
-          <li class=" nav-item"><a href="changelog.html"><i class="icon-copy"></i><span data-i18n="nav.changelog.main" class="menu-title">Changelog</span><span class="tag tag tag-pill tag-danger float-xs-right">1.0</span></a>
+          <li class=" nav-item"><a href="https://github.com/pixinvent/robust-free-bootstrap-admin-template/issues"><i class="icon-support"></i><span data-i18n="nav.support_raise_support.main" class="menu-title">{{ __('menu.raisesupport') }}</span></a>
           </li>
-          <li class=" navigation-header"><span data-i18n="nav.category.support">Support</span><i data-toggle="tooltip" data-placement="right" data-original-title="Support" class="icon-ellipsis icon-ellipsis"></i>
-          </li>
-          <li class=" nav-item"><a href="https://github.com/pixinvent/robust-free-bootstrap-admin-template/issues"><i class="icon-support"></i><span data-i18n="nav.support_raise_support.main" class="menu-title">Raise Support</span></a>
-          </li>
-          <li class=" nav-item"><a href="https://pixinvent.com/free-bootstrap-template/robust-lite/documentation"><i class="icon-document-text"></i><span data-i18n="nav.support_documentation.main" class="menu-title">Documentation</span></a>
+          <li class=" nav-item"><a href="https://pixinvent.com/free-bootstrap-template/robust-lite/documentation"><i class="icon-document-text"></i><span data-i18n="nav.support_documentation.main" class="menu-title">{{ __('menu.documentation') }}</span></a>
           </li>
         </ul>
       </div>

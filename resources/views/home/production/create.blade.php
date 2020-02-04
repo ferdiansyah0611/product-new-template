@@ -1,20 +1,35 @@
-@extends('layouts.template')
+@extends('templates')
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-    <div class="col-md-10 mx-auto card custom-card">
-    <nav>
-      <div class="nav nav-tabs" id="nav-tab" role="tablist">
-        <a class="nav-item nav-link active" id="nav-img1-tab" data-toggle="tab" href="#nav-img1" role="tab" aria-controls="nav-img1" aria-selected="true">IMG 1</a>
-        <a class="nav-item nav-link" id="nav-img2-tab" data-toggle="tab" href="#nav-img2" role="tab" aria-controls="nav-img2" aria-selected="false">IMG 2</a>
-        <a class="nav-item nav-link" id="nav-img3-tab" data-toggle="tab" href="#nav-img3" role="tab" aria-controls="nav-img3" aria-selected="false">IMG 3</a>
-        <a class="nav-item nav-link" id="nav-img4-tab" data-toggle="tab" href="#nav-img4" role="tab" aria-controls="nav-img4" aria-selected="false">IMG 4</a>
-        <a class="nav-item nav-link" id="nav-img5-tab" data-toggle="tab" href="#nav-img5" role="tab" aria-controls="nav-img5" aria-selected="false">IMG 5</a>
-      </div>
-    </nav>
-    <div class="tab-content" id="nav-tabContent">
-      <div class="tab-pane fade show active" id="nav-img1" role="tabpanel" aria-labelledby="nav-img1-tab">
-        <form method="post" action="{{route('production.store')}}" enctype="multipart/form-data">@csrf
+      <div class="col-xl-12 col-lg-12">
+      <div class="card custom-card">
+        <div class="card-header">
+          <h4 class="card-title">Basic Tabs</h4>
+        </div>
+        <div class="card-body">
+          <div class="card-block">
+            <p>Takes the basic nav from above and adds the <code>.nav-tabs</code> class to generate a tabbed interface. </p>
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a class="nav-link active" id="base-tab1" data-toggle="tab" aria-controls="tab1" href="#tab1" aria-expanded="true">Tab 1</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="base-tab2" data-toggle="tab" aria-controls="tab2" href="#tab2" aria-expanded="false">Tab 2</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="base-tab3" data-toggle="tab" aria-controls="tab3" href="#tab3" aria-expanded="false">Tab 3</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="base-tab4" data-toggle="tab" aria-controls="tab4" href="#tab4" aria-expanded="false">Tab 4</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="base-tab5" data-toggle="tab" aria-controls="tab5" href="#tab5" aria-expanded="false">Tab 5</a>
+              </li>
+            </ul>
+            <div class="tab-content px-1 pt-1">
+              <div role="tabpanel" class="tab-pane active" id="tab1" aria-expanded="true" aria-labelledby="base-tab1">
+              <form method="post" action="{{route('production.store')}}" enctype="multipart/form-data">@csrf
         <div class="form-row">
           <input type="hidden" value="{{auth()->user()->id}}" name="user_id">
           <div class="form-group col-md-6">
@@ -26,18 +41,14 @@
             <input type="number" name="price" class="form-control"  placeholder="Type price in rupiah">
           </div>
         </div>
-        <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="inputGroupFileAddon02">Pictures 1</span>
-        </div>
-        <div class="custom-file">
-          <input type="file" name="mainimg" accept="image/*" class="custom-file-input" required>
-          <label class="custom-file-label">Choose images file</label>
-        </div>
-      </div>
+          <input type="file" name="mainimg" accept="image/*" required>
         <div class="form-group">
           <label for="inputAddress">Description Products</label>
           <textarea type="text" name="description_products" class="form-control" placeholder="Type of description products"></textarea>
+        </div>
+        <div class="col-xl-12">
+          <label class="form-col-label">Your Profits 1/units</label>
+          <input type="number" name="profits">
         </div>
         <div class="form-row">
           <div class="form-group col-md-4">
@@ -62,9 +73,9 @@
         </div>
         <button type="submit" class="btn btn-primary">Create</button>
       </form>
-      </div><!--./1-->
-      <div class="tab-pane fade" id="nav-img2" role="tabpanel" aria-labelledby="nav-img2-tab">
-        <form method="post" action="{{route('production.store')}}" enctype="multipart/form-data">@csrf
+              </div><!--1-->
+              <div class="tab-pane" id="tab2" aria-labelledby="base-tab2">
+              <form method="post" action="{{route('production.store')}}" enctype="multipart/form-data">@csrf
         <div class="form-row">
           <input type="text" value="{{auth()->user()->id}}" name="user_id" style="display: none;">
           <div class="form-group col-md-6">
@@ -76,27 +87,15 @@
             <input type="number" name="price" class="form-control"  placeholder="Type price in rupiah">
           </div>
         </div>
-        <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="inputGroupFileAddon02">Pictures 1</span>
-        </div>
-        <div class="custom-file">
-          <input type="file" name="mainimg" accept="image/*" class="custom-file-input" required>
-          <label class="custom-file-label">Choose images file</label>
-        </div>
-      </div>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="inputGroupFileAddon02">Pictures 2</span>
-        </div>
-        <div class="custom-file">
-          <input type="file" name="img2" accept="image/*" class="custom-file-input" required>
-          <label class="custom-file-label">Choose images file</label>
-        </div>
-      </div>
+          <input type="file" name="mainimg" accept="image/*" required>
+          <input type="file" name="img2" accept="image/*" required>
         <div class="form-group">
           <label for="inputAddress">Description Products</label>
           <textarea type="text" name="description_products" class="form-control" placeholder="Type of description products"></textarea>
+        </div>
+        <div class="col-xl-12">
+          <label class="form-col-label">Your Profits 1/units</label>
+          <input type="number" name="profits">
         </div>
         <div class="form-row">
           <div class="form-group col-md-4">
@@ -121,9 +120,9 @@
         </div>
         <button type="submit" class="btn btn-primary">Create</button>
       </form>
-      </div><!--./2-->
-      <div class="tab-pane fade" id="nav-img3" role="tabpanel" aria-labelledby="nav-img3-tab">
-        <form method="post" action="{{route('production.store')}}" enctype="multipart/form-data">@csrf
+              </div><!--2-->
+              <div class="tab-pane" id="tab3" aria-labelledby="base-tab3">
+              <form method="post" action="{{route('production.store')}}" enctype="multipart/form-data">@csrf
         <div class="form-row">
           <input type="text" value="{{auth()->user()->id}}" name="user_id" style="display: none;">
           <div class="form-group col-md-6">
@@ -135,36 +134,16 @@
             <input type="number" name="price" class="form-control"  placeholder="Type price in rupiah">
           </div>
         </div>
-        <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="inputGroupFileAddon02">Pictures 1</span>
-        </div>
-        <div class="custom-file">
-          <input type="file" name="mainimg" accept="image/*" class="custom-file-input" required>
-          <label class="custom-file-label">Choose images file</label>
-        </div>
-      </div>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="inputGroupFileAddon02">Pictures 2</span>
-        </div>
-        <div class="custom-file">
-          <input type="file" name="img2" accept="image/*" class="custom-file-input" required>
-          <label class="custom-file-label">Choose images file</label>
-        </div>
-      </div>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="inputGroupFileAddon02">Pictures 3</span>
-        </div>
-        <div class="custom-file">
-          <input type="file" name="img3" accept="image/*" class="custom-file-input" required>
-          <label class="custom-file-label">Choose images file</label>
-        </div>
-      </div>
+          <input type="file" name="mainimg" accept="image/*" required>
+          <input type="file" name="img2" accept="image/*" required>
+          <input type="file" name="img3" accept="image/*" required>
         <div class="form-group">
           <label for="inputAddress">Description Products</label>
           <textarea type="text" name="description_products" class="form-control" placeholder="Type of description products"></textarea>
+        </div>
+        <div class="col-xl-12">
+          <label class="form-col-label">Your Profits 1/units</label>
+          <input type="number" name="profits">
         </div>
         <div class="form-row">
           <div class="form-group col-md-4">
@@ -189,9 +168,9 @@
         </div>
         <button type="submit" class="btn btn-primary">Create</button>
       </form>
-      </div><!--./3-->
-      <div class="tab-pane fade" id="nav-img4" role="tabpanel" aria-labelledby="nav-img4-tab">
-        <form method="post" action="{{route('production.store')}}" enctype="multipart/form-data">@csrf
+              </div><!--3-->
+              <div class="tab-pane" id="tab4" aria-labelledby="base-tab4">
+              <form method="post" action="{{route('production.store')}}" enctype="multipart/form-data">@csrf
         <div class="form-row">
           <input type="text" value="{{auth()->user()->id}}" name="user_id" style="display: none;">
           <div class="form-group col-md-6">
@@ -203,45 +182,17 @@
             <input type="number" name="price" class="form-control"  placeholder="Type price in rupiah">
           </div>
         </div>
-        <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="inputGroupFileAddon02">Pictures 1</span>
-        </div>
-        <div class="custom-file">
-          <input type="file" name="mainimg" accept="image/*" class="custom-file-input" required>
-          <label class="custom-file-label">Choose images file</label>
-        </div>
-      </div>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="inputGroupFileAddon02">Pictures 2</span>
-        </div>
-        <div class="custom-file">
-          <input type="file" name="img2" accept="image/*" class="custom-file-input" required>
-          <label class="custom-file-label">Choose images file</label>
-        </div>
-      </div>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="inputGroupFileAddon02">Pictures 3</span>
-        </div>
-        <div class="custom-file">
-          <input type="file" name="img3" accept="image/*" class="custom-file-input" required>
-          <label class="custom-file-label">Choose images file</label>
-        </div>
-      </div>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="inputGroupFileAddon02">Pictures 4</span>
-        </div>
-        <div class="custom-file">
-          <input type="file" name="img4" accept="image/*" class="custom-file-input" required>
-          <label class="custom-file-label">Choose images file</label>
-        </div>
-      </div>
+          <input type="file" name="mainimg" accept="image/*" required>
+          <input type="file" name="img2" accept="image/*" required>
+          <input type="file" name="img3" accept="image/*" required>
+          <input type="file" name="img4" accept="image/*" required>
         <div class="form-group">
           <label for="inputAddress">Description Products</label>
           <textarea type="text" name="description_products" class="form-control" placeholder="Type of description products"></textarea>
+        </div>
+        <div class="col-xl-12">
+          <label class="form-col-label">Your Profits 1/units</label>
+          <input type="number" name="profits">
         </div>
         <div class="form-row">
           <div class="form-group col-md-4">
@@ -266,9 +217,9 @@
         </div>
         <button type="submit" class="btn btn-primary">Create</button>
       </form>
-      </div><!--./4-->
-      <div class="tab-pane fade" id="nav-img5" role="tabpanel" aria-labelledby="nav-img5-tab">
-        <form method="post" action="{{route('production.store')}}" enctype="multipart/form-data">@csrf
+              </div><!--4-->
+              <div class="tab-pane" id="tab5" aria-labelledby="base-tab5">
+              <form method="post" action="{{route('production.store')}}" enctype="multipart/form-data">@csrf
         <div class="form-row">
           <input type="text" value="{{auth()->user()->id}}" name="user_id" style="display: none;">
           <div class="form-group col-md-6">
@@ -280,54 +231,18 @@
             <input type="number" name="price" class="form-control"  placeholder="Type price in rupiah">
           </div>
         </div>
-        <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="inputGroupFileAddon02">Pictures 1</span>
-        </div>
-        <div class="custom-file">
-          <input type="file" name="mainimg" accept="image/*" class="custom-file-input" required>
-          <label class="custom-file-label">Choose images file</label>
-        </div>
-      </div>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="inputGroupFileAddon02">Pictures 2</span>
-        </div>
-        <div class="custom-file">
-          <input type="file" name="img2" accept="image/*" class="custom-file-input" required>
-          <label class="custom-file-label">Choose images file</label>
-        </div>
-      </div>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="inputGroupFileAddon02">Pictures 3</span>
-        </div>
-        <div class="custom-file">
-          <input type="file" name="img3" accept="image/*" class="custom-file-input" required>
-          <label class="custom-file-label">Choose images file</label>
-        </div>
-      </div>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="inputGroupFileAddon02">Pictures 4</span>
-        </div>
-        <div class="custom-file">
-          <input type="file" name="img4" accept="image/*" class="custom-file-input" required>
-          <label class="custom-file-label">Choose images file</label>
-        </div>
-      </div>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text" id="inputGroupFileAddon02">Pictures 5</span>
-        </div>
-        <div class="custom-file">
-          <input type="file" name="img5" accept="image/*" class="custom-file-input" required>
-          <label class="custom-file-label">Choose images file</label>
-        </div>
-      </div>
+          <input type="file" name="mainimg" accept="image/*" required>
+          <input type="file" name="img2" accept="image/*" required>
+          <input type="file" name="img3" accept="image/*" required>
+          <input type="file" name="img4" accept="image/*" required>
+          <input type="file" name="img5" accept="image/*" required>
         <div class="form-group">
           <label for="inputAddress">Description Products</label>
           <textarea type="text" name="description_products" class="form-control" placeholder="Type of description products"></textarea>
+        </div>
+        <div class="col-xl-12">
+          <label class="form-col-label">Your Profits 1/units</label>
+          <input type="number" name="profits">
         </div>
         <div class="form-row">
           <div class="form-group col-md-4">
@@ -352,8 +267,11 @@
         </div>
         <button type="submit" class="btn btn-primary">Create</button>
       </form>
-      </div><!--./5-->
-    </div>     
+              </div><!--5-->
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     </div>
 </div>

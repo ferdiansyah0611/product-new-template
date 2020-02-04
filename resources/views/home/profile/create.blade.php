@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('templates')
 @section('content')
 @foreach($profiles as $p)
 @if($p->id == auth()->user()->id)

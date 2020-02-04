@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('templates')
 @section('content')
 <div class="col-md-12 card table-responsive" style="font-family: 'Times New Roman;">
 	<div class="card-header">My Products</div>

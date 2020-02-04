@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('templates')
 @section('content')
 <div class="mx-auto col-md-12 card" style="display:block;text-align:center;">
 @foreach ($data as $my_cart)

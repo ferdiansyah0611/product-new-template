@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('templates')
 @section('header')
 <div class="row mb-2">
           <div class="col-sm-6">
