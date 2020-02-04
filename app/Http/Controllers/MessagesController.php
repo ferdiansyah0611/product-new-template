@@ -8,6 +8,8 @@ use Carbon\Carbon;
 //Models
 use App\Models\Messages;
 use App\Models\Profile;
+use App\User;
+use App;
 class MessagesController extends Controller
 {
     public function __construct()
@@ -16,6 +18,7 @@ class MessagesController extends Controller
     }
     public function index()
     {
+        App::setLocale(Auth()->user()->languange);
         $title = 'All Messages';
         $profile_user = Profile::where('user_id', Auth()->user()->id)->get();
         $message = Messages::latest()->where('to', Auth()->user()->email)->orderBy('updated_at', 'ASC')->paginate(25);
@@ -23,11 +26,13 @@ class MessagesController extends Controller
     }
     public function create()
     {
+        App::setLocale(Auth()->user()->languange);
         $title = 'New Messages';
         $profile_user = Profile::where('user_id', Auth()->user()->id)->get();
         return view('home.messages.new', compact('title', 'profile_user'));
     }
     public function archive(){
+        App::setLocale(Auth()->user()->languange);
         $data_user = DB::table('messages')->where('to', Auth()->user()->email)->where('status', '2')->get();
         $title = 'archive';
         return view('home.messages.archives', compact('data_user', 'title'));
@@ -50,6 +55,7 @@ class MessagesController extends Controller
     }
     public function show(Messages $messages)
     {
+        App::setLocale(Auth()->user()->languange);
         $title = 'Show';
         DB::table('messages')->where('id', $messages->id)->update([
             'status' => '1',

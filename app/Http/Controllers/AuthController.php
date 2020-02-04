@@ -41,7 +41,7 @@ class AuthController extends Controller
                 'device' => $request->header('User-Agent'),
                 'on' => Carbon::now(),
             ]);
-            return redirect()->intended('dashboard');
+            return redirect()->intended('dashboards')->with('success', 'Your has success login');
         }
         return Redirect::to("login")->withSuccess('Oppes! You have entered invalid credentials');
     }
@@ -50,15 +50,16 @@ class AuthController extends Controller
     {  
         DB::table('users')->insert([
             'id' => rand(1000000000,10000000000),
-            'user_id' => Crypt::encrypt(rand(1000000000,10000000000)),
+            'user_id' => rand(1000000000,10000000000),
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'born' => $request->born,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
        
-        return Redirect::to("dashboard")->withSuccess('Great! You have Successfully loggedin');
+        return Redirect::to("dashboards")->withSuccess('Great! You have Successfully loggedin');
     }
      
     public function dashboard()

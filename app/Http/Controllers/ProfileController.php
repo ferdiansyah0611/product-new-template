@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Carbon\Carbon;
 use File;
+use App;
 //Models
 use App\Models\Purchase;
 use App\Models\Profile;
@@ -25,6 +26,7 @@ class ProfileController extends Controller
     }
     public function create()
     {
+        App::setLocale(Auth()->user()->languange);
         $profile_user = Profile::where('user_id', Auth()->user()->id)->get();
         $profiles = Profile::latest()->get();
         $title = 'create';
@@ -72,12 +74,14 @@ class ProfileController extends Controller
     }
     public function show(Profile $profile)
     {
+        App::setLocale(Auth()->user()->languange);
         $title = 'show';
         $profile_user = Profile::where('user_id', Auth()->user()->id)->get();
         return view('home.profile.show', compact('profile', 'title', 'profile_user', 'likers'));
     }
     public function edit(Profile $profile)
     {
+        App::setLocale(Auth()->user()->languange);
         $title = 'edit';
         $profile_user = Profile::where('user_id', Auth()->user()->id)->get();
         return view('home.profile.edit', compact('profile', 'title' ,'profile_user'));
@@ -110,12 +114,14 @@ class ProfileController extends Controller
     }
     public function me(Profile $profile)
     {
+        App::setLocale(Auth()->user()->languange);
         $title = 'show';
         $profile_user = Profile::where('user_id', Auth()->user()->id)->get();
         return view('home.profile.me', compact('profile', 'title', 'profile_user', 'likers'));
     }
     public function set_account(Profile $profile)
     {
+        App::setLocale(Auth()->user()->languange);
         $title = 'edit';
         $profile_user = Profile::where('user_id', Auth()->user()->id)->get();
         $profile_user_data = User::where('id', Auth()->user()->id)->get();
@@ -172,6 +178,7 @@ class ProfileController extends Controller
         return redirect()->route('production.index')->with('success', 'Your has been update account');
     }
     public function display_set(){
+        App::setLocale(Auth()->user()->languange);
         $title = 'display';
         return view('home.settings.display', compact('title'));
     }
@@ -185,20 +192,24 @@ class ProfileController extends Controller
         return redirect()->back();
     }
     public function pending(){
+        App::setLocale(Auth()->user()->languange);
         $title = 'pending';
         $data_pending = Purchase::where('user_id', Auth()->user()->id)->where('status', 'Pending')->orderBy('created_at', 'DESC')->paginate(25);
         return view('home.purchase.pending', compact('title'), ['data' => $data_pending]);
     }
     public function receive(){
+        App::setLocale(Auth()->user()->languange);
         $title = 'Receive';
         $data_pending = Purchase::where('user_id', Auth()->user()->id)->where('status', 'Receive')->orderBy('created_at', 'DESC')->paginate(25);
         return view('home.purchase.receive', compact('title'), ['data' => $data_pending]);
     }
     public function preview(){
+        App::setLocale(Auth()->user()->languange);
         $title = 'preview';
         return view('home.settings.preview', compact('title'));
     }
     public function view_history(){
+        App::setLocale(Auth()->user()->languange);
         $title = 'title';
         $data_history = DB::table('session_logins')->where('user_id', Auth()->user()->id)->paginate('15');
         return view('home.settings.history_login', ['data' => $data_history], compact('title'));
@@ -206,5 +217,11 @@ class ProfileController extends Controller
     public function delete_history_login(Request $request){
         DB::table('session_logins')->where('id', $request->id)->delete();
         return redirect()->back()->with('success', 'Succesfully delete history login');
+    }
+    public function changeLang(Request $request){
+        DB::table('users')->where('id', Auth()->user()->id)->update([
+            'languange' => $request->langID,
+        ]);
+        return redirect()->back();
     }
 }

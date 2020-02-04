@@ -66,6 +66,7 @@ class Kernel extends HttpKernel
         'Pemilik' => \App\Http\Middleware\Pemilik::class,
         'Pengurus' => \App\Http\Middleware\Pengurus::class,
         'Premium' => \App\Http\Middleware\Premium::class,
+        'sweetalert' => \UxWeb\SweetAlert\ConvertMessagesIntoSweetAlert::class,
     ];
 
     /**

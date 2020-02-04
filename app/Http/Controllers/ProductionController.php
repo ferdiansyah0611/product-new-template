@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App;
 //Models
 use App\Models\Production;
 use App\Models\Question;
@@ -30,6 +31,7 @@ class ProductionController extends Controller
     }
     public function index()
     {
+        App::setLocale(Auth()->user()->languange);
         $title = 'All Products';
         $product = Production::latest()->where('status', 'public')->orderBy('updated_at', 'DESC')->paginate(16);
         $category = Category::where('display', 'show')->orderBy('name', 'ASC')->get();
@@ -37,6 +39,7 @@ class ProductionController extends Controller
     }
     public function create()
     {
+        App::setLocale(Auth()->user()->languange);
         $title = 'Create Products';
         $category = Category::latest()->orderBy('name', 'DESC')->get();
         return view('home.production.create', compact('title', 'category'));
@@ -54,6 +57,7 @@ class ProductionController extends Controller
                 'img4' => 'file|mimes:jpg,png,jpeg|max:4000',
                 'img5' => 'file|mimes:jpg,png,jpeg|max:4000',
                 'category_products' => 'string',
+                'profits' => 'required',
                 'status' => 'string',
             ]);
         if ($request->has('img_for_one')) {
@@ -71,6 +75,9 @@ class ProductionController extends Controller
                 'main_pictures' => $namefile,
                 'category_products' => $request->category_products,
                 'status' => $request->status,
+                'profits' => $request->profits,
+                'month' => Carbon::now()->get('month'),
+                'year' => Carbon::now()->get('year'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
@@ -101,6 +108,9 @@ class ProductionController extends Controller
                 'second_pictures' => $namefile_2,
                 'category_products' => $request->category_products,
                 'status' => $request->status,
+                'profits' => $request->profits,
+                'month' => Carbon::now()->get('month'),
+                'year' => Carbon::now()->get('year'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
@@ -137,6 +147,9 @@ class ProductionController extends Controller
                 'three_pictures' => $namefile_3,
                 'category_products' => $request->category_products,
                 'status' => $request->status,
+                'profits' => $request->profits,
+                'month' => Carbon::now()->get('month'),
+                'year' => Carbon::now()->get('year'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
@@ -177,6 +190,9 @@ class ProductionController extends Controller
                 'fourth_pictures' => $namefile_4,
                 'category_products' => $request->category_products,
                 'status' => $request->status,
+                'profits' => $request->profits,
+                'month' => Carbon::now()->get('month'),
+                'year' => Carbon::now()->get('year'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
@@ -221,6 +237,9 @@ class ProductionController extends Controller
                 'five_pictures' => $namefile_5,
                 'category_products' => $request->category_products,
                 'status' => $request->status,
+                'profits' => $request->profits,
+                'month' => Carbon::now()->get('month'),
+                'year' => Carbon::now()->get('year'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
@@ -235,11 +254,19 @@ class ProductionController extends Controller
     }
     public function show(Production $production)
     {
+        App::setLocale(Auth()->user()->languange);
         $title = base64_decode($production->name_products);
         return view('home.production.show', compact('title', 'production'));
     }
+    public function showRef(Production $production)
+    {
+        App::setLocale(Auth()->user()->languange);
+        $title = base64_decode($production->name_products);
+        return view('home.production.component.showRef', compact('title', 'production'));
+    }
     public function edit(Production $production)
     {
+        App::setLocale(Auth()->user()->languange);
         $title = 'Edit production';
         return view('home.production.edit', compact('production', 'title'));
     }
@@ -274,23 +301,27 @@ class ProductionController extends Controller
     }
     public function draft()
     {
+        App::setLocale(Auth()->user()->languange);
         $title = 'Draft Products';
         $mydraft = Production::where('user_id', auth()->user()->id)->where('status', 'draft')->get();
         return view('/home/production/draft', compact('title', 'mydraft'));
     }
     public function manage(){
+        App::setLocale(Auth()->user()->languange);
         $title = 'Manage My Products';
         $product = Production::latest()->where('user_id', auth()->user()->id)->orderBy('updated_at', 'DESC')->get();
         $category = Category::latest()->orderBy('name', 'DESC')->get();
         return view('home.production.manage', compact('product', 'title', 'category'));
     }
     public function search(Request $request){
+        App::setLocale(Auth()->user()->languange);
         $search = base64_encode($request->search);
         $products = DB::table('productions')->where('name_products','like',"%".$search."%")->paginate();
         $title = 'Search for'.$request->search;
         return view('home.production.search', compact('products', 'title', 'search'));
     }
     public function search_manage(Request $request){
+        App::setLocale(Auth()->user()->languange);
         $search = base64_encode($request->search);
         $products = DB::table('productions')->where('user_id', auth()->user()->id)->where('name_products','like',"%".$search."%")->paginate();
         $title = 'search';
@@ -334,7 +365,10 @@ class ProductionController extends Controller
         DB::table('notifications')->insert([
             'user_id' => Auth()->user()->id,
             'name' => Auth()->user()->name,
-            'notification' => strtolower(Auth()->user()->name).', has been create products',
+            'notification' => strtolower(Auth()->user()->name).', has been comment your products',
+            'link' => $request->production_id,
+            'to' => 'question',
+            'status' => '0',
             'created_at' => Carbon::now(),
         ]);
         return redirect()->back()->with('success', 'Create comment successfuly');
@@ -367,24 +401,27 @@ class ProductionController extends Controller
         return redirect()->back();
     }
     public function filtering_question(Request $request, Production $production){
+        App::setLocale(Auth()->user()->languange);
         $title = 'data';
         $filter = $request->productsid;
         $db = DB::table('questions')->where('production_id', $request->productsid)->where('star', $request->star)->get();
         return view('home.production.show', compact('production', 'title'), ['data' => $db]);
     }
     public function delete_question(Production $production, Question $question){
+        App::setLocale(Auth()->user()->languange);
         $image = Question::where('id',$question->id)->first();
         File::delete(public_path().$image->img);
         $question->delete();
         DB::table('notifications')->insert([
             'user_id' => Auth()->user()->id,
             'name' => Auth()->user()->name,
-            'notification' => 'Your has been delete comments for id'.$question->id,
+            'notification' => 'Your has been delete comments for id '.$question->id,
             'created_at' => Carbon::now(),
         ]);
         return redirect()->back()->with('success', 'Delete comment successfuly');
     }
     public function category(Request $request){
+        App::setLocale(Auth()->user()->languange);
        
         $search = $request->category;
         $title = 'Category '.$search;
@@ -398,12 +435,14 @@ class ProductionController extends Controller
             $stock = $request->stock;
             $remain = $request->stock - $request->remaining;
             $count =  Auth()->user()->saldo - $total;
+            $me = (2/100)*$total;
             $product = DB::table('productions')->where('id', $production->id)->get();
             if(Auth()->user()->saldo < $count){
                 return back();
             }
             if(Auth()->user()->saldo > $count){
-                DB::table('purchases')->insert([
+                foreach($product as $prod){
+                    DB::table('purchases')->insert([
                 'id' => rand(1000000000, 10000000000),
                 'production_id' => $request->buy_products,
                 'purchase_id' => $purchases,
@@ -411,11 +450,17 @@ class ProductionController extends Controller
                 'price' => $request->price,
                 'sum_purchase' => $request->remaining,
                 'totals' => $total,
+                'profits' => $prod->profits * $request->remaining,
+                'me' => $me,
                 'status' => 'Pending',
                 'locate' => Auth()->user()->locate,
+                'month' => Carbon::now()->get('month'),
+                'year' => Carbon::now()->get('year'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
+                }
+                
             
             foreach($product as $pro){
                 DB::table('productions')->where('id', $production->id)->update([
@@ -480,23 +525,27 @@ class ProductionController extends Controller
             
         }
         public function topup(){
+            App::setLocale(Auth()->user()->languange);
             $title = 'topp';
             return view('home.purchase.topup', compact('title'));
         }
         public function view_cart(){
+            App::setLocale(Auth()->user()->languange);
             $title = 'Cart';
             $cart = Cart::where('user_id', Auth()->user()->id)->get();
             return view('home.production.cart', compact('title'), ['data' => $cart]);
         }
         public function view_request_products(){
+            App::setLocale(Auth()->user()->languange);
             $title = 'title';
             $production = Production::all();
             $data_product_user = Production::where('user_id', Auth()->user()->id)->get();
-            foreach($data_product_user as $data){
-                $purchase_data = Purchase::where('production_id', $data->id)->get();
-            }
-            
             return view('home.production.request', compact('title', 'production'), ['product_user' => $data_product_user]);
+        }
+        public function cardPay(Request $request){
+            $title = 'title';
+            $showPay = DB::table('productions')->where('id', $request->buy_products)->get();
+            return view('home.production.cartPayment', compact('title', 'showPay', 'amount'));
         }
     
 }
