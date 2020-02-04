@@ -22,87 +22,97 @@ Route::resource('/production', 'ProductionController');
 //Route::resource('/dashboard', 'DashboardController');
 //Route::resource('/messages', 'MessagesController');
 Route::resource('/products', 'ProductAjaxController');
+
+
+Route::get('/templates/notifAll', 'DashboardController@notifAll');
+Route::get('/templates/notifMessages', 'DashboardController@notifMessages');
 //Dashboard page
-Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
-Route::post('/dashboard/category/added', 'DashboardController@new_category')->name('dashboard.newcategory');
-Route::delete('/dashboard/category/delete/{category}', 'DashboardController@delete_category')->name('dashboard.deletecategory');
-Route::get('/dashboard/category/{category}', 'DashboardController@edit_category')->name('dashboard.editcategory');
-Route::post('/dashboard/category/update/{category}', 'DashboardController@update_category')->name('dashboard.updatecategory');
-Route::get('/dashboard/manage/users', 'DashboardController@manage_users')->name('dashboard.manageusers');
-Route::get('/dashboard/manage/users/for', 'DashboardController@search_user')->name('dashboard.searchmanageuser');
-Route::post('/dashboard/manage/users/updating/{user}', 'DashboardController@update_users')->name('dashboard.updateusers');
-Route::get('/dashboard/manage/database', 'DashboardController@manage_database')->name('dashboard.managedb');
-Route::delete('/dashboard/notification/delete', 'DashboardController@delete_all_notification')->name('dashboard.deleteallnotification');
-Route::post('/dashboard/manage/database/savesize/{production}', 'DashboardController@save_size')->name('dashboard.dbsavesize');
-Route::post('/dashboard/saldo/random', 'DashboardController@random_saldo')->name('dashboard.randomsaldo');
-//Delete messages
-Route::get('/messages/archives', 'MessagesController@archive')->name('messages.archived');
-Route::get('/messages', 'MessagesController@index')->name('messages.index');
-Route::get('/messages/create', 'MessagesController@create')->name('messages.create');
-Route::get('/messages/{messages}', 'MessagesController@show')->name('messages.show');
-Route::delete('/messages/delete/{messages}', 'MessagesController@destroy')->name('messages.deletemessages');
-Route::post('/messages/readdata/{messages}', 'MessagesController@read_message')->name('messages.read');
-Route::post('messages/savedata', 'MessagesController@store')->name('messages.store');
-Route::post('/messages/beforeread/{messages}', 'MessagesController@before_message')->name('messages.before');
+Route::group(['prefix'=>'dashboards','as'=>'dashboard.'], function(){
+     Route::get('/', 'DashboardController@index')->name('index');
+     Route::post('/category/added', 'DashboardController@new_category')->name('newcategory');
+     Route::delete('/category/delete/{category}', 'DashboardController@delete_category')->name('deletecategory');
+     Route::get('/category/{category}', 'DashboardController@edit_category')->name('editcategory');
+     Route::post('/category/update/{category}', 'DashboardController@update_category')->name('updatecategory');
+     Route::get('/manage/users', 'DashboardController@manage_users')->name('manageusers');
+     Route::get('/manage/users/for', 'DashboardController@search_user')->name('searchmanageuser');
+     Route::post('/manage/users/updating/{user}', 'DashboardController@update_users')->name('updateusers');
+     Route::get('/manage/database', 'DashboardController@manage_database')->name('managedb');
+     Route::delete('/notification/delete', 'DashboardController@delete_all_notification')->name('deleteallnotification');
+     Route::post('/manage/database/savesize/{production}', 'DashboardController@save_size')->name('dbsavesize');
+     Route::post('/saldo/random', 'DashboardController@random_saldo')->name('randomsaldo');
+
+     	Route::get('/purchaseIndex', 'DashboardController@purchaseIndex');
+     	Route::get('/topDashboard', 'DashboardController@topDashboard');
+     	Route::get('/categoryIndex', 'DashboardController@categoryIndex');
+ });
+//Messages page
+Route::group(['prefix'=>'message','as'=>'messages.'], function(){
+     Route::get('/messages/archives', 'MessagesController@archive')->name('archived');
+     Route::get('/messages', 'MessagesController@index')->name('index');
+     Route::get('/messages/inbox', 'MessagesController@index')->name('inbox');
+     Route::get('/messages/create', 'MessagesController@create')->name('create');
+     Route::get('/messages/{messages}', 'MessagesController@show')->name('show');
+     Route::delete('/messages/delete/{messages}', 'MessagesController@destroy')->name('deletemessages');
+     Route::post('/messages/readdata/{messages}', 'MessagesController@read_message')->name('read');
+     Route::post('messages/savedata', 'MessagesController@store')->name('store');
+     Route::post('/messages/beforeread/{messages}', 'MessagesController@before_message')->name('before');
+ });
 //Productions page
-Route::get('/productions', 'ProductionController@index')->name('productions.index');
-Route::get('/productions/create', 'ProductionController@create')->name('productions.create');
-Route::post('/productions/store', 'ProductionController@store')->name('productions.store');
-Route::get('/productions/manage/{production}/edit/{any}', 'ProductionController@edit')->name('productions.edit');
-Route::post('/productions/update/{production}', 'ProductionController@update')->name('productions.update');
-Route::delete('/productions/destroy/{production}', 'ProductionController@destroy')->name('productions.destroy');
-Route::get('/productions/manage', 'ProductionController@manage')->name('productions.manage');
-Route::get('/productions/{production}/views/{name_products}/{views}', 'ProductionController@show')->name('productions.show');
-Route::get('/productions/{production}/views/filtering-data', 'ProductionController@filtering_question')->name('productions.filtering_star');
-Route::get('/productions/for', 'ProductionController@search')->name('productions.search');
-Route::get('/productions/manage/for', 'ProductionController@search_manage')->name('productions.searchmanage');
-Route::get('/productions/draft-products', 'ProductionController@draft')->name('production.draft');
-Route::post('/productions/questions', 'ProductionController@save_question')->name('productions.question');
-Route::delete('/productions/questions/delete/{question}', 'ProductionController@delete_question')->name('productions.delete');
-Route::post('/productions/questions/likes', 'ProductionController@like_question')->name('productions.likequestion');
-Route::get('/productions/category/view-for', 'ProductionController@category')->name('productions.category');
-Route::post('/productions/buy/{production}', 'ProductionController@buy')->name('productions.buy');
-Route::post('/productions/isisaldo', 'ProductionController@isi_saldo')->name('production.isisaldo');
-Route::get('/productions/top-up', 'ProductionController@topup')->name('productions.topup');
-Route::get('/productions/my-cart', 'ProductionController@view_cart')->name('productions.viewcart');
-Route::get('/productions/request-for-my-product', 'ProductionController@view_request_products')->name('productions.request');
- //end production
+Route::group(['production'=>'production','as'=>'productions.'], function(){
+     Route::get('/productions/', 'ProductionController@index')->name('index');
+     Route::get('/productions/create', 'ProductionController@create')->name('create');
+     Route::post('/productions/store', 'ProductionController@store')->name('store');
+     Route::get('/productions/manage/{production}/edit/{any}', 'ProductionController@edit')->name('edit');
+     Route::post('/productions/update/{production}', 'ProductionController@update')->name('update');
+     Route::delete('/productions/destroy/{production}', 'ProductionController@destroy')->name('destroy');
+     Route::get('/productions/manage', 'ProductionController@manage')->name('manage');
+     Route::get('/productions/{production}/views', 'ProductionController@show')->name('show');
+     	Route::get('/productions/{production}/views/ref', 'ProductionController@showRef')->name('showRef');
+     Route::get('/productions/{production}/views/filtering-data', 'ProductionController@filtering_question')->name('filtering_star');
+     Route::get('/productions/for', 'ProductionController@search')->name('search');
+     Route::get('/productions/manage/for', 'ProductionController@search_manage')->name('searchmanage');
+     Route::get('/productions/draft-products', 'ProductionController@draft')->name('draft');
+     Route::post('/productions/questions', 'ProductionController@save_question')->name('question');
+     Route::delete('/productions/questions/delete/{question}', 'ProductionController@delete_question')->name('delete');
+     Route::post('/productions/questions/likes', 'ProductionController@like_question')->name('likequestion');
+     Route::get('/productions/category/view-for', 'ProductionController@category')->name('category');
+     Route::post('/productions/buy/{production}', 'ProductionController@buy')->name('buy');
+     Route::post('/productions/isisaldo', 'ProductionController@isi_saldo')->name('isisaldo');
+     Route::get('/productions/top-up', 'ProductionController@topup')->name('topup');
+     Route::get('/productions/request-for-my-product', 'ProductionController@view_request_products')->name('request');
+     Route::get('/productions/my-cart', 'ProductionController@view_cart')->name('viewcart');
+     Route::get('/productions/payment', 'ProductionController@cardPay')->name('payment');
+ });
 //Profile page
-Route::get('/profiles/create', 'ProfileController@create')->name('profile.create');
-Route::get('/profiles/views/{profile}', 'ProfileController@show')->name('profile.show');
-Route::get('/profiles/views/me/{profile}', 'ProfileController@me')->name('profile.me');
-Route::post('/profiles/update/{profile}', 'ProfileController@update')->name('profile.update');
-Route::post('/profiles/create/new-data', 'ProfileController@store')->name('profile.store');
-Route::get('/profiles/{profile}/edit', 'ProfileController@edit')->name('profile.edit');
-Route::post('/profiles/views/like', 'ProfileController@like')->name('profile.like');
-//end profiles
-//setting page
-Route::get('/settings/accounts', 'ProfileController@set_account')->name('setting.account');
-Route::post('/settings/accounts/{user}', 'ProfileController@update_account')->name('setting.update');
-Route::get('/settings/display', 'ProfileController@display_set')->name('setting.display');
-Route::post('/settings/display', 'ProfileController@display_store')->name('setting.storedisplay');
-Route::delete('/settings/delete/history', 'ProfileController@delete_history_login')->name('setting.deleteHistory');
-Route::get('/preview', 'ProfileController@preview');
-Route::get('/settings/history-login','ProfileController@view_history')->name('setting.history');
-//end setting
+Route::group(['prefix'=>'profiles','as'=>'profile.'], function(){
+     Route::get('/profiles/create', 'ProfileController@create')->name('create');
+     Route::get('/profiles/views/{profile}', 'ProfileController@show')->name('show');
+     Route::get('/profiles/views/me/{profile}', 'ProfileController@me')->name('me');
+     Route::post('/profiles/update/{profile}', 'ProfileController@update')->name('update');
+     Route::post('/profiles/create/new-data', 'ProfileController@store')->name('store');
+     Route::get('/profiles/{profile}/edit', 'ProfileController@edit')->name('edit');
+     Route::post('/profiles/views/like', 'ProfileController@like')->name('like');
+ });
+//Setting page
+Route::group(['settings'=>'settings','as'=>'setting.'], function(){
+     Route::get('/settings/accounts', 'ProfileController@set_account')->name('account');
+     Route::post('/settings/accounts/{user}', 'ProfileController@update_account')->name('update');
+     Route::get('/settings/display', 'ProfileController@display_set')->name('display');
+     Route::post('/settings/display', 'ProfileController@display_store')->name('storedisplay');
+     Route::delete('/settings/delete/history', 'ProfileController@delete_history_login')->name('deleteHistory');
+     Route::get('/preview', 'ProfileController@preview')->name('preview');
+     Route::get('/settings/history-login','ProfileController@view_history')->name('history');
+     Route::post('/change-languange', 'ProfileController@changeLang')->name('changelang');
+ });
 Route::get('/purchase/pending', 'ProfileController@pending')->name('purchase.pending');
 Route::get('/purchase/receive', 'ProfileController@receive')->name('purchase.receive');
-//end purchase
-//about page
-Route::get('/about/privacy-policy', 'DashboardController@privacy')->name('about.privacy');
-Route::get('/about/community', 'DashboardController@community')->name('about.community');
-Route::get('/about/disclaimer', 'DashboardController@disclaimer')->name('about.disclaimer');
-Route::get('/about/programming', 'DashboardController@programming')->name('about.programming');
-//end about
-/*Route::get('/products/{any}', function($any){
-     $url = base64_decode($any);
-     //redirect according to $url ... for example "api/test/"
-     return redirect( '/productions/'.$url );
-});*/
+Route::group(['prefix'=>'abouts','as'=>'about.'], function(){
+     Route::get('/about/privacy-policy', 'DashboardController@privacy')->name('privacy');
+     Route::get('/about/community', 'DashboardController@community')->name('community');
+     Route::get('/about/disclaimer', 'DashboardController@disclaimer')->name('disclaimer');
+     Route::get('/about/programming', 'DashboardController@programming')->name('programming');
+ });
 Route::get('/documentation', 'HomeController@spa');
-//Route::get('/{any}', 'HomeController@spa')->where('any', '.*');
 Route::get('/template', 'HomeController@templates');
-
-
 Route::get('redirect/{driver}', 'AuthController@redirectToProvider')->name('login.provider');
 Route::get('{driver}/callback', 'AuthController@handleProviderCallback')->name('login.callback');
