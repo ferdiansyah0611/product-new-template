@@ -16,6 +16,7 @@ class CreateProductionsTable extends Migration
         Schema::create('productions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
+            $table->string('title', 255)->nullable();
             $table->string('name_products');
             $table->longtext('price');
             $table->longtext('description_products');
