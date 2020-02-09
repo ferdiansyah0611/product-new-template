@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 //Helping
+use App;
 use File;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Url;
 use Illuminate\Support\Facades\Validator;
@@ -12,15 +14,25 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
-use App;
 //Models
-use App\Models\Production;
-use App\Models\Question;
-use App\Models\Profile;
-use App\Models\Category;
-use App\Models\LikeQuestion;
 use App\Models\Cart;
+use App\Models\Category;
+use App\Models\Chart;
+use App\Models\Client;
+use App\Models\Invitation;
+use App\Models\Like;
+use App\Models\LikeQuestion;
+use App\Models\Messages;
+use App\Models\Notification;
+use App\Models\Page;
+use App\Models\Production;
+use App\Models\Profile;
 use App\Models\Purchase;
+use App\Models\Question;
+use App\Models\Saldo;
+use App\Models\SessionDisplay;
+use App\Models\SessionLogin;
+use App\Models\Setting;
 use App\User;
 
 class ProductionController extends Controller
@@ -68,6 +80,7 @@ class ProductionController extends Controller
             DB::table('productions')->insert([
                 'id' => rand(1000000000, 10000000000),
                 'user_id' => $request->user_id,
+                'title' => Str::slug($request->img_for_one),
                 'name_products' => base64_encode($request->img_for_one),
                 'price' => $request->price,
                 'description_products' => Crypt::encrypt($request->description_products),
@@ -84,7 +97,10 @@ class ProductionController extends Controller
             DB::table('notifications')->insert([
                 'user_id' => Auth()->user()->id,
                 'name' => Auth()->user()->name,
-                'notification' => strtolower(Auth()->user()->name).', has been create products',
+                'to' => 'production',
+                'email_to' => Auth()->user()->email,
+                'status' => '0',
+                'notification' => 'Your has been create products',
                 'created_at' => Carbon::now(),
             ]);
             return redirect()->route('productions.index')->with('success', 'Added Products successfuly');
@@ -100,6 +116,7 @@ class ProductionController extends Controller
             DB::table('productions')->insert([
                 'id' => rand(1000000000, 10000000000),
                 'user_id' => $request->user_id,
+                'title' => Str::slug($request->img_for_two),
                 'name_products' => base64_encode($request->img_for_two),
                 'price' => $request->price,
                 'description_products' => Crypt::encrypt($request->description_products),
@@ -117,7 +134,10 @@ class ProductionController extends Controller
             DB::table('notifications')->insert([
                 'user_id' => Auth()->user()->id,
                 'name' => Auth()->user()->name,
-                'notification' => strtolower(Auth()->user()->name).', has been create products',
+                'email_to' => Auth()->user()->email,
+                'status' => '0',
+                'to' => 'production',
+                'notification' => 'Your has been create products',
                 'created_at' => Carbon::now(),
             ]);
             return redirect()->route('productions.index')->with('success', 'Added Products successfuly');
@@ -138,6 +158,7 @@ class ProductionController extends Controller
             DB::table('productions')->insert([
                 'id' => rand(1000000000, 10000000000),
                 'user_id' => $request->user_id,
+                'title' => Str::slug($request->img_for_three),
                 'name_products' => base64_encode($request->img_for_three),
                 'price' => $request->price,
                 'description_products' => Crypt::encrypt($request->description_products),
@@ -156,7 +177,10 @@ class ProductionController extends Controller
             DB::table('notifications')->insert([
                 'user_id' => Auth()->user()->id,
                 'name' => Auth()->user()->name,
-                'notification' => strtolower(Auth()->user()->name).', has been create products',
+                'email_to' => Auth()->user()->email,
+                'status' => '0',
+                'to' => 'production',
+                'notification' => 'Your has been create products',
                 'created_at' => Carbon::now(),
             ]);
             return redirect()->route('productions.index')->with('success', 'Added Products successfuly');
@@ -180,6 +204,7 @@ class ProductionController extends Controller
             DB::table('productions')->insert([
                 'id' => rand(1000000000, 10000000000),
                 'user_id' => $request->user_id,
+                'title' => Str::slug($request->img_for_fourth),
                 'name_products' => base64_encode($request->img_for_fourth),
                 'price' => $request->price,
                 'description_products' => Crypt::encrypt($request->description_products),
@@ -199,7 +224,10 @@ class ProductionController extends Controller
             DB::table('notifications')->insert([
                 'user_id' => Auth()->user()->id,
                 'name' => Auth()->user()->name,
-                'notification' => strtolower(Auth()->user()->name).', has been create products',
+                'email_to' => Auth()->user()->email,
+                'status' => '0',
+                'to' => 'production',
+                'notification' => 'Your has been create products',
                 'created_at' => Carbon::now(),
             ]);
             return redirect()->route('productions.index')->with('success', 'Added Products successfuly');
@@ -226,6 +254,7 @@ class ProductionController extends Controller
             DB::table('productions')->insert([
                 'id' => rand(1000000000, 10000000000),
                 'user_id' => $request->user_id,
+                'title' => Str::slug($request->img_for_five),
                 'name_products' => base64_encode($request->img_for_five),
                 'price' => $request->price,
                 'description_products' => Crypt::encrypt($request->description_products),
@@ -246,7 +275,10 @@ class ProductionController extends Controller
             DB::table('notifications')->insert([
                 'user_id' => Auth()->user()->id,
                 'name' => Auth()->user()->name,
-                'notification' => strtolower(Auth()->user()->name).', has been create products',
+                'email_to' => Auth()->user()->email,
+                'status' => '0',
+                'to' => 'production',
+                'notification' => 'Your has been create products',
                 'created_at' => Carbon::now(),
             ]);
             return redirect()->route('productions.index')->with('success', 'Added Products successfuly');
@@ -257,6 +289,13 @@ class ProductionController extends Controller
         App::setLocale(Auth()->user()->languange);
         $title = base64_decode($production->name_products);
         return view('home.production.show', compact('title', 'production'));
+    }
+    public function show2($slug)
+    {
+        App::setLocale(Auth()->user()->languange);
+        $title = 'helo';
+        $show = Production::where('title', $slug)->first();
+        return view('home.production.show', compact('title', 'show'));
     }
     public function showRef(Production $production)
     {
@@ -290,6 +329,7 @@ class ProductionController extends Controller
     }
     public function destroy(Production $production)
     {
+        Purchase::where('production_id', $production->id)->delete();
         $image = Production::where('id',$production->id)->first();
         File::delete(public_path().$image->main_pictures);
         File::delete(public_path().$image->second_pictures);
@@ -442,8 +482,9 @@ class ProductionController extends Controller
             }
             if(Auth()->user()->saldo > $count){
                 foreach($product as $prod){
-                    DB::table('purchases')->insert([
-                'id' => rand(1000000000, 10000000000),
+                $id_purchases = rand(1000000000, 10000000000);
+                DB::table('purchases')->insert([
+                'id' => $id_purchases,
                 'production_id' => $request->buy_products,
                 'purchase_id' => $purchases,
                 'user_id' => Auth()->user()->id,
@@ -458,8 +499,17 @@ class ProductionController extends Controller
                 'year' => Carbon::now()->get('year'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-            ]);
+                ]);
                 }
+                DB::table('notifications')->insert([
+                'user_id' => Auth()->user()->id,
+                'name' => Auth()->user()->name,
+                'email_to' => Auth()->user()->email,
+                'status' => '0',
+                'to' => 'purchases',
+                'notification' => 'Your has been buy products with id purchases '.$id_purchases,
+                'created_at' => Carbon::now(),
+            ]);
                 
             
             foreach($product as $pro){
@@ -547,7 +597,20 @@ class ProductionController extends Controller
             $showPay = DB::table('productions')->where('id', $request->buy_products)->get();
             return view('home.production.cartPayment', compact('title', 'showPay', 'amount'));
         }
-    
+
+/*------------------------------------------------------------*/
+/*------------------------------------------------------------*/
+/*----------------------FOR SINGLE PAGES----------------------*/
+/*------------------------------------------------------------*/ 
+/*------------------------------------------------------------*/
+
+    public function allPagesSPA(){
+        App::setLocale(Auth()->user()->languange);
+        $title = 'All Products';
+        $product = Production::latest()->where('status', 'public')->orderBy('updated_at', 'DESC')->paginate(16);
+        $category = Category::where('display', 'show')->orderBy('name', 'ASC')->get();
+        return view('home.production.spa.allPages', compact('product', 'title', 'category'));
+    }
 }
 /*List Function
 index

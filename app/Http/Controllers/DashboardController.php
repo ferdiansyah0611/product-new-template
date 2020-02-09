@@ -2,21 +2,32 @@
 
 namespace App\Http\Controllers;
 //Helping
-use Illuminate\Http\Request;
+use App;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 //Models
+use App\Models\Cart;
 use App\Models\Category;
-use App\Models\Production;
-use App\Models\Messages;
-use App\Models\Profile;
-use App\Models\Notification;
+use App\Models\Chart;
+use App\Models\Client;
+use App\Models\Invitation;
 use App\Models\Like;
-use App\Models\Saldo;
+use App\Models\LikeQuestion;
+use App\Models\Messages;
+use App\Models\Notification;
+use App\Models\Page;
+use App\Models\Production;
+use App\Models\Profile;
 use App\Models\Purchase;
+use App\Models\Question;
+use App\Models\Saldo;
+use App\Models\SessionDisplay;
+use App\Models\SessionLogin;
+use App\Models\Setting;
 use App\User;
-use App;
+
 class DashboardController extends Controller
 {
     public function __construct()
@@ -37,7 +48,7 @@ class DashboardController extends Controller
         $usersdata = DB::table('users')->orderBy('created_at', 'DESC')->paginate('9');
         return view('home.dashboard.index', compact('title', 'category', 'notification_products', 'user', 'profile_user', 'likers', 'count_users'), ['latest' => $latest_product, 'pu' => $purchase, 'users' => $usersdata]);
     }
-            public function purchaseIndex(){
+            public function purchaseDashboardCOMP(){
                 App::setLocale(Auth()->user()->languange);
                 $profile_user = Profile::where('user_id', Auth()->user()->id)->get();
                 $title = 'Dashboard';
@@ -50,12 +61,25 @@ class DashboardController extends Controller
                 $usersdata = DB::table('users')->orderBy('created_at', 'DESC')->paginate('9');
                 return view('home.dashboard.component.purchasesIndex', compact('title', 'category', 'notification_products', 'user', 'profile_user', 'likers', 'count_users'), ['latest' => $latest_product, 'pu' => $purchase, 'users' => $usersdata]);
             }
-            public function topDashboard(){
+            public function topDashboardCOMP(){
                 return view('home.dashboard.component.topDashboard');
             }
-            public function categoryIndex(){
+            public function categoryIndexCOMP(){
                 $category = Category::latest()->paginate('8');
                 return view('home.dashboard.component.categoryIndex', compact('category'));
+            }
+            public function dashboardRef(){
+                App::setLocale(Auth()->user()->languange);
+        $profile_user = Profile::where('user_id', Auth()->user()->id)->get();
+        $title = 'Dashboard';
+        $category = Category::latest()->get();
+        $notification_products = Notification::where('user_id', Auth()->user()->id)->orderBy('id', 'DESC')->paginate(10);
+        $likers = Like::where('user_id', Auth()->user()->id)->pluck('like')->count();
+        $count_users = User::all()->pluck('count')->count();
+        $latest_product = Production::where('user_id', Auth()->user()->id)->latest()->paginate(5);
+        $purchase = Purchase::where('user_id', Auth()->user()->id)->paginate(10);
+        $usersdata = DB::table('users')->orderBy('created_at', 'DESC')->paginate('9');
+        return view('home.dashboard.component.dashboardRef', compact('title', 'category', 'notification_products', 'user', 'profile_user', 'likers', 'count_users'), ['latest' => $latest_product, 'pu' => $purchase, 'users' => $usersdata]);
             }
     public function notifAll(){
         App::setLocale(Auth()->user()->languange);
@@ -210,4 +234,38 @@ class DashboardController extends Controller
         ]);
         return redirect()->back();
     }
+
+/*------------------------------------------------------------*/
+/*------------------------------------------------------------*/
+/*----------------------FOR SINGLE PAGES----------------------*/
+/*------------------------------------------------------------*/ 
+/*------------------------------------------------------------*/
+
+    public function dashboardSPA(User $user)
+    {
+        App::setLocale(Auth()->user()->languange);
+        $profile_user = Profile::where('user_id', Auth()->user()->id)->get();
+        $title = 'Dashboard';
+        $category = Category::latest()->get();
+        $notification_products = Notification::where('user_id', Auth()->user()->id)->orderBy('id', 'DESC')->paginate(10);
+        $likers = Like::where('user_id', Auth()->user()->id)->pluck('like')->count();
+        $count_users = User::all()->pluck('count')->count();
+        $latest_product = Production::where('user_id', Auth()->user()->id)->latest()->paginate(5);
+        $purchase = Purchase::where('user_id', Auth()->user()->id)->paginate(10);
+        $usersdata = DB::table('users')->orderBy('created_at', 'DESC')->paginate('9');
+        return view('home.dashboard.spa.dashboard', compact('title', 'category', 'notification_products', 'user', 'profile_user', 'likers', 'count_users'), ['latest' => $latest_product, 'pu' => $purchase, 'users' => $usersdata]);
+    }
+    public function manageUsersSPA(){
+        App::setLocale(Auth()->user()->languange);
+        $title = 'Manage';
+        $get_users = User::latest()->paginate(25);
+        return view('home.dashboard.spa.manage_users', compact('title'),['for' => $get_users]);
+    }
+    public function manageDatabaseSPA(){
+        App::setLocale(Auth()->user()->languange);
+        $user_usage = Production::latest()->get();
+        $title = 'manage';
+        return view('home.dashboard.spa.manage_database', compact('title'), ['qwerty' => $user_usage]);
+    }
+
 }

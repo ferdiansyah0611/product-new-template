@@ -5,15 +5,31 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 use File;
 use App;
 //Models
-use App\Models\Purchase;
-use App\Models\Profile;
+use App\Models\Cart;
+use App\Models\Category;
+use App\Models\Chart;
+use App\Models\Client;
+use App\Models\Invitation;
 use App\Models\Like;
-use App\User;
+use App\Models\LikeQuestion;
+use App\Models\Messages;
+use App\Models\Notification;
+use App\Models\Page;
+use App\Models\Production;
+use App\Models\Profile;
+use App\Models\Purchase;
+use App\Models\Question;
+use App\Models\Saldo;
+use App\Models\SessionDisplay;
+use App\Models\SessionLogin;
 use App\Models\Setting;
+use App\User;
+
 class ProfileController extends Controller
 {
     public function __construct()
@@ -223,5 +239,17 @@ class ProfileController extends Controller
             'languange' => $request->langID,
         ]);
         return redirect()->back();
+    }
+    public function readallnotif(Request $request){
+        Notification::where('email_to', Auth()->user()->email)->where('status', '0')->update([
+            'status' => '1',
+        ]);
+        return response()->json('success', 'Success');
+    }
+    public function showProfile($slug){
+        App::setLocale(Auth()->user()->languange);
+        $title = 'show';
+        $data = DB::table('users')->where('name_store', $slug)->get();
+        return view('home.profile.show', compact('title', 'data'));
     }
 }

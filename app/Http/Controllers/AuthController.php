@@ -8,6 +8,7 @@ use Socialite;
 Use App\User;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Db;
 use Carbon\Carbon;
@@ -35,12 +36,14 @@ class AuthController extends Controller
  
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
+            $idRandom = rand(1000000000, 10000000000);
             DB::table('session_logins')->insert([
-                'id' => rand(1000000000, 10000000000),
+                'id' => $idRandom,
                 'user_id' => Auth()->user()->id,
                 'device' => $request->header('User-Agent'),
                 'on' => Carbon::now(),
             ]);
+            $request->session()->put('id', $idRandom);
             return redirect()->intended('dashboards')->with('success', 'Your has success login');
         }
         return Redirect::to("login")->withSuccess('Oppes! You have entered invalid credentials');
@@ -52,6 +55,7 @@ class AuthController extends Controller
             'id' => rand(1000000000,10000000000),
             'user_id' => rand(1000000000,10000000000),
             'name' => $request->name,
+            'name_store' => Str::slug($request->name.'-store-').rand(1000000000,10000000000),
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'born' => $request->born,
@@ -81,13 +85,11 @@ class AuthController extends Controller
       ]);
     }
      
-    public function logout() {
-        $getUserlog = DB::table('session_logins')->where('user_id')->orderBy('created_at', 'DESC')->get();
-        foreach($getUserlog as $get){
-            DB::table('session_logins')->where('user_id', $get->user_id)->update([
+    public function logout(Request $request) {
+        $getID = $request->session()->get('id');
+            DB::table('session_logins')->where('id', $getID)->update([
                 'logout' => Carbon::now(),
             ]);
-        }
         Session::flush();
         Auth::logout();
         return Redirect('login');

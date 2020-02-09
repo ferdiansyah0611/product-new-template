@@ -2,14 +2,35 @@
 
 namespace App\Http\Controllers;
 //Helping
+use App;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 //Models
+use App\Models\Cart;
+use App\Models\Category;
+use App\Models\Chart;
+use App\Models\Client;
+use App\Models\Invitation;
+use App\Models\Like;
+use App\Models\LikeQuestion;
 use App\Models\Messages;
+use App\Models\Notification;
+use App\Models\Page;
+use App\Models\Production;
 use App\Models\Profile;
+use App\Models\Purchase;
+use App\Models\Question;
+use App\Models\Saldo;
+use App\Models\SessionDisplay;
+use App\Models\SessionLogin;
+use App\Models\Setting;
 use App\User;
-use App;
+
+use App\Models\AdminChat;
+use App\Models\EmailChat;
+use App\Models\MessageChat;
+
 class MessagesController extends Controller
 {
     public function __construct()
@@ -87,5 +108,87 @@ class MessagesController extends Controller
         ]);
         return redirect()->back();
     }
+
+
+    public function chattingIndex(){
+        $title = 'My chatting';
+        $chatList = DB::table('message_chats')->where('mail_from', Auth()->user()->email)->paginate('50');
+        return view('home.chat.chatting', compact('title'), ['data' => $chatList]);
+    }
+
+    public function requestMessage(Request $request){
+        if($request->has('adminChatting')){
+            if($request->file('file2')){
+                $this->validate($request,[
+                    'adminChatting' => 'required|longText',
+                    'file1' => 'max:10000|mimes:jpg,png,jpeg,jfif',
+                    'subjects' => 'string|required',
+                ]);
+                $file = $request->file('file1');
+                $filename = '/db/img/'.$file->getClientOriginalName();
+                $dir = 'db/img';
+                $file->move($dir,$filename);
+                DB::table('admin_chats')->insert([
+                    'user_id' => Auth()->user()->id,
+                    'from' => Auth()->user()->email,
+                    'subjects' => $request->subjects,
+                    'messages' => $request->adminChatting,
+                    'file_1' => $filename,
+                ]);
+                return redirect()->back();
+            }//if file
+            if($request->file('file2')){
+                $this->validate($request,[
+                    'adminChatting' => 'required|longText',
+                    'file1' => 'max:10000|mimes:jpg,png,jpeg,jfif',
+                    'file2' => 'max:10000|mimes:jpg,png,jpeg,jfif',
+                    'subjects' => 'string|required',
+                ]);
+                $file = $request->file('file1');
+                $filename = '/db/img/'.$file->getClientOriginalName();
+                $dir = 'db/img';
+                $file->move($dir,$filename);
+                //file2
+                $file2 = $request->file('file2');
+                $filename2 = '/db/img/'.$file2->getClientOriginalName();
+                $file2->move($dir,$filename2);
+                DB::table('admin_chats')->insert([
+                    'user_id' => Auth()->user()->id,
+                    'from' => Auth()->user()->email,
+                    'subjects' => $request->subjects,
+                    'messages' => $request->adminChatting,
+                    'file_1' => $filename,
+                    'file_2' => $filename2,
+                ]);
+                return redirect()->back();
+            }//if file
+        }//if chat
+        if($request->has('mailChatting')){
+            DB::table('email_chats')->insert([
+                'user_id' => Auth()->user()->id,
+                'from' => Auth()->user()->email,
+                'to' => $request->to,
+                'subjects' => $request->subjects,
+                'messages' => $request->mailChatting,
+            ]);
+            return redirect()->back();
+        }//if Mail
+        if($request->has('chatting')){
+            $idRandom = rand(1000000000,10000000000);
+            $to = $request->mail_to;
+            $from = Auth()->user()->email;
+            $messages = $request->chatting;
+            DB::table('message_chats')->insert([
+                'id' => $idRandom,
+                'messages_id' => $idRandom,
+                'mail_to' => $to,
+                'mail_from' => $from,
+                'messages' => $messages,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+            return redirect()->back()->with('success', 'Send success');
+        }//if chatting
+    }//function
     
 }
