@@ -14,3 +14,8 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/users', 'ApiController@test');
+Route::get('/category','ApiController@index');
+Route::get('/newseed', 'ApiController@seednew');
+Route::get('/newseed/{id}', 'ApiController@seednewID');
+Route::get('/newseed/{title}', 'ApiController@seednewTitle');
+Route::get('/newseed/upload', 'ApiController@seednewUpload');
