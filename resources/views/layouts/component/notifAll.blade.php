@@ -8,14 +8,36 @@
                   $comment = DB::table('notifications')->where('email_to', Auth()->user()->email)->where('status', '0')->orderBy('created_at', 'DESC')->paginate('1');
                   foreach($comment as $com){
                     if($com->to == 'question'){
-                    echo "<a href='".url('/')."/productions/".$com->link."/views"."' class='list-group-item'>";
+                    echo "<a href='".url('/')."productions/".$com->link."/views"."' class='list-group-item'>";
                     echo "<div class='media'>";
                     echo "<div class='media-left valign-middle'>";
                     echo "<i class='icon-speech-bubble icon-bg-circle bg-cyan'></i></div>";
                     echo "<div class='media-body'>";
                     echo "<h6 class='media-heading'>You have new comment!</h6>";
                     echo "<p class='notification-text font-small-3 text-muted'>".$com->notification."</p><small>";
-                    echo "<time datetime='2015-06-11T18:29:20+08:00' class='media-meta text-muted'>".\Carbon\Carbon::parse($com->created_at)->diffForHumans()."</time></small>";
+                    echo "<time class='media-meta text-muted'>".\Carbon\Carbon::parse($com->created_at)->diffForHumans()."</time></small>";
+                    echo "</div></div></a>";
+                    }
+                    if($com->to == 'production'){
+                    echo "<a href='".url('/')."productions/".$com->link."/views"."' class='list-group-item'>";
+                    echo "<div class='media'>";
+                    echo "<div class='media-left valign-middle'>";
+                    echo "<i class='icon-speech-bubble icon-bg-circle bg-cyan'></i></div>";
+                    echo "<div class='media-body'>";
+                    echo "<h6 class='media-heading'>You have new product!</h6>";
+                    echo "<p class='notification-text font-small-3 text-muted'>".$com->notification."</p><small>";
+                    echo "<time class='media-meta text-muted'>".\Carbon\Carbon::parse($com->created_at)->diffForHumans()."</time></small>";
+                    echo "</div></div></a>";
+                    }
+                    if($com->to == 'purchases'){
+                    echo "<a href='".url('/')."productions/".$com->link."/views"."' class='list-group-item'>";
+                    echo "<div class='media'>";
+                    echo "<div class='media-left valign-middle'>";
+                    echo "<i class='icon-social-usd icon-bg-circle bg-cyan'></i></div>";
+                    echo "<div class='media-body'>";
+                    echo "<h6 class='media-heading'>You have new purchases!</h6>";
+                    echo "<p class='notification-text font-small-3 text-muted'>".$com->notification."</p><small>";
+                    echo "<time class='media-meta text-muted'>".\Carbon\Carbon::parse($com->created_at)->diffForHumans()."</time></small>";
                     echo "</div></div></a>";
                     }
                     
@@ -23,5 +45,14 @@
                   
                   ?>
                 </li>
-                <li class="dropdown-menu-footer"><a href="javascript:void(0)" class="dropdown-item text-muted text-xs-center">{{ __('menu.readallnotif') }}</a></li>
+                <li class="dropdown-menu-footer">
+                  <div class="row">
+                  <form class="col-xl-6">@csrf
+                    <button id="readNotification" class="btn btn-danger">{{ __('menu.readallnotif') }}</button>
+                  </form>
+                  <form class="col-xl-6">@csrf
+                    <button id="deleteNotification" class="btn btn-danger">Delete All Notif</button>
+                  </form>
+                </div>
+                </li>
               </ul>
