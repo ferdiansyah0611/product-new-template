@@ -1,86 +1,76 @@
 @extends('templates')
 @section('css')
-    <title>Login Account</title>
-@endsection
-@section('header')
-<div class="row mb-2"><!-- /.col -->
-  <div class="col-sm-6">
-      <h1 class="m-0 text-dark" style="font-size:24px;text-decoration:underline;font-family:Solway-Bold;">Login Accounts</h1>
-    </div><!-- /.col -->
-          <div class="col-sm-6">
-              <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item" style="font-family:Kalam-Light;"><a style="cursor:pointer" onclick="window.history.back()"><i class="fas fa-chevron-circle-left"></i> Back Pages</a></li>
-              </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
+    <title>Login Account <?php echo $_SERVER['HTTP_HOST']; ?></title>
 @endsection
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <form method="POST" action="{{url('post-login')}}">
-                        @csrf
-
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                                @error('email')
+<section class="flexbox-container">
+    <div class="col-md-4 offset-md-4 col-xs-10 offset-xs-1  box-shadow-2 p-0">
+        <div class="card border-grey border-lighten-3 m-0">
+            <div class="card-header no-border">
+                <div class="card-title text-xs-center">
+                    <div class="p-1"><img src="../../app-assets/images/logo/robust-logo-dark.png" alt="branding logo"></div>
+                </div>
+                <h6 class="card-subtitle line-on-side text-muted text-xs-center font-small-3 pt-2"><span>Login with <?php echo $_SERVER['HTTP_HOST']; ?></span></h6>
+            </div>
+            <div class="card-body collapse in">
+                <div class="card-block">
+                    <form class="form-horizontal form-simple" method="post" action="{{url('post-login')}}" novalidate>@csrf
+                        <fieldset class="form-group position-relative has-icon-left mb-0">
+                            <input type="text" class="form-control form-control-lg input-lg" id="user-name" placeholder="Your Username" name="email" required>
+                            @error('email')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
+                            <div class="form-control-position">
+                                <i class="icon-head"></i>
                             </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                @error('password')
+                        </fieldset>
+                        <fieldset class="form-group position-relative has-icon-left mt-1">
+                            <input type="password" class="form-control form-control-lg input-lg" id="user-password" placeholder="Enter Password" name="password" required>
+                            @error('password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
+                            <div class="form-control-position">
+                                <i class="icon-key3"></i>
                             </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
+                        </fieldset>
+                        <fieldset class="form-group row">
+                            <div class="col-md-6 col-xs-12 text-xs-center text-md-left">
+                                <fieldset>
+                                    <input type="checkbox" id="remember-me" class="chk-remember">
+                                    <label for="remember-me"> Remember Me</label>
+                                </fieldset>
                             </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
+                            <div class="col-md-6 col-xs-12 text-xs-center text-md-right"><a href="recover-password.html" class="card-link">Forgot Password?</a></div>
+                        </fieldset>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block"><i class="icon-unlock2"></i> Login</button>
                     </form>
-                    <a href="{{ route('login.provider', 'google') }}" class="btn btn-danger">{{ __('Google Sign in') }}</a>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="">
+                    <a href="{{url('redirect/google')}}" title="">Google</a>
+                    <p class="float-sm-right text-xs-center m-0">Dont have account ? <a href="{{url('/registrations')}}" class="card-link">Sign Up</a></p>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>@endsection
+@section('ajax')
+<script type="text/javascript">
+$(document).ready(function(){
+$('#footerStyle').css("display", "none");
+$('#bodyStyle').css({
+  "background-image":"url({{asset('image/walpaper-9.jpg')}})",
+  "background-attachment":"fixed",
+  "background-size":"100% 100%",
+});
+$('#navbarStyle').css("display", "none");
+$('#menuStyle').css("display", "none");
+$('#appContentStyle').css("margin", "0");
+});
+</script>
 @endsection
