@@ -22,11 +22,12 @@ class CreatePurchasesTable extends Migration
             $table->string('sum_purchase');
             $table->string('totals');
             $table->bigInteger('profits')->nullable();
+            $table->bigInteger('me');
             $table->string('status');
             $table->string('locate');
             $table->boolean('count')->default('1');
-            $table->integer('month', 12)->nullable();
-            $table->integer('year', 12)->nullable();
+            $table->integer('month')->nullable();
+            $table->integer('year')->nullable();
             $table->timestamps();
         });
     }

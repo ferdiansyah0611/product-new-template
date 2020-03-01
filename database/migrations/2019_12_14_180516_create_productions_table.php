@@ -16,7 +16,7 @@ class CreateProductionsTable extends Migration
         Schema::create('productions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->string('title', 255)->nullable();
+            $table->string('title')->nullable();
             $table->string('name_products');
             $table->longtext('price');
             $table->longtext('description_products');
@@ -27,14 +27,14 @@ class CreateProductionsTable extends Migration
             $table->string('fourth_pictures')->nullable();
             $table->string('five_pictures')->nullable();
             $table->string('category_products')->nullable();
-            $table->BigInteger('sold_out')->nullable();
+            $table->bigInteger('sold_out')->nullable();
             $table->bigInteger('profits')->nullable();
-            $table->bigInteger('me', 255)->nullable();
+            $table->bigInteger('me')->nullable();
             $table->string('size')->nullable();
             $table->string('status')->nullable();
             $table->boolean('count')->default('1');
-            $table->integer('month', 12)->nullable();
-            $table->integer('year', 12)->nullable();
+            $table->integer('month')->nullable();
+            $table->integer('year')->nullable();
             $table->timestamps();
         });
     }

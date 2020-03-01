@@ -19,6 +19,7 @@ class CreateNotificationsTable extends Migration
             $table->string('name');
             $table->string('notification');
             $table->string('to')->nullable();
+			$table->string('email_to')->nullable();
             $table->bigInteger('link')->nullable();
             $table->integer('status')->nullable();
             $table->boolean('count')->default('1');
