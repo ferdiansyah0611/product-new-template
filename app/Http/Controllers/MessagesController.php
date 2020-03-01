@@ -41,9 +41,8 @@ class MessagesController extends Controller
     {
         App::setLocale(Auth()->user()->languange);
         $title = 'All Messages';
-        $profile_user = Profile::where('user_id', Auth()->user()->id)->get();
         $message = Messages::latest()->where('to', Auth()->user()->email)->orderBy('updated_at', 'ASC')->paginate(25);
-        return view('home.messages.inbox', compact('message', 'title', 'profile_user'));
+        return view('home.messages.inbox', compact('message', 'title'));
     }
     public function create()
     {
@@ -83,14 +82,6 @@ class MessagesController extends Controller
         ]);
         return view('home.messages.show', compact('messages', 'title'));
     }
-    public function edit(Messages $messages)
-    {
-        //
-    }
-    public function update(Request $request, Messages $messages)
-    {
-        //
-    }
     public function destroy(Messages $messages)
     {
         $messages->delete();
@@ -114,6 +105,10 @@ class MessagesController extends Controller
         $title = 'My chatting';
         $chatList = DB::table('message_chats')->where('mail_from', Auth()->user()->email)->paginate('50');
         return view('home.chat.chatting', compact('title'), ['data' => $chatList]);
+    }
+    public function viewChatting($email){
+        $data = MessageChat::where('mail_to', $email)->paginate(10);
+        return response()->json($data);
     }
 
     public function requestMessage(Request $request){

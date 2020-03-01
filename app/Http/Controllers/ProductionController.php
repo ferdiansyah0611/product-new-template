@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+//vendor
+use Yajra\Datatables\Datatables;
 //Models
 use App\Models\Cart;
 use App\Models\Category;
@@ -37,17 +39,22 @@ use App\User;
 
 class ProductionController extends Controller
 {
+    public $random;
+    public $directory_image;
     public function __construct()
     {
         $this->middleware('auth');
+        $this->random = rand(1000000,10000000);
+        $this->directory_image = storage_path('app/public/image');
     }
     public function index()
     {
         App::setLocale(Auth()->user()->languange);
         $title = 'All Products';
-        $product = Production::latest()->where('status', 'public')->orderBy('updated_at', 'DESC')->paginate(16);
+        $product = Production::latest()->where('status', 'public')->orderBy('updated_at', 'DESC')->paginate(48);
         $category = Category::where('display', 'show')->orderBy('name', 'ASC')->get();
-        return view('home.production.index', compact('product', 'title', 'category'));
+        $newseed = DB::connection('mysql2')->table('newseed')->paginate(8);
+        return view('home.production.index', compact('product', 'title', 'category'), ['datanewseed' => $newseed]);
     }
     public function create()
     {
@@ -78,7 +85,7 @@ class ProductionController extends Controller
             $toupload = 'db/img/';
             $file->move($toupload,$namefile);
             DB::table('productions')->insert([
-                'id' => rand(1000000000, 10000000000),
+                'id' => $this->random,
                 'user_id' => $request->user_id,
                 'title' => Str::slug($request->img_for_one),
                 'name_products' => base64_encode($request->img_for_one),
@@ -89,6 +96,8 @@ class ProductionController extends Controller
                 'category_products' => $request->category_products,
                 'status' => $request->status,
                 'profits' => $request->profits,
+                'discount' => $request->discount,
+                'conditions' => $request->conditions,
                 'month' => Carbon::now()->get('month'),
                 'year' => Carbon::now()->get('year'),
                 'created_at' => Carbon::now(),
@@ -114,7 +123,7 @@ class ProductionController extends Controller
             $namefile_2 = "/db/img/".$file_2->getClientOriginalName();
             $file_2->move($toupload,$namefile_2);
             DB::table('productions')->insert([
-                'id' => rand(1000000000, 10000000000),
+                'id' => $this->random,
                 'user_id' => $request->user_id,
                 'title' => Str::slug($request->img_for_two),
                 'name_products' => base64_encode($request->img_for_two),
@@ -126,6 +135,8 @@ class ProductionController extends Controller
                 'category_products' => $request->category_products,
                 'status' => $request->status,
                 'profits' => $request->profits,
+                'discount' => $request->discount,
+                'conditions' => $request->conditions,
                 'month' => Carbon::now()->get('month'),
                 'year' => Carbon::now()->get('year'),
                 'created_at' => Carbon::now(),
@@ -156,7 +167,7 @@ class ProductionController extends Controller
             $file_3->move($toupload,$namefile_3);
 
             DB::table('productions')->insert([
-                'id' => rand(1000000000, 10000000000),
+                'id' => $this->random,
                 'user_id' => $request->user_id,
                 'title' => Str::slug($request->img_for_three),
                 'name_products' => base64_encode($request->img_for_three),
@@ -169,6 +180,8 @@ class ProductionController extends Controller
                 'category_products' => $request->category_products,
                 'status' => $request->status,
                 'profits' => $request->profits,
+                'discount' => $request->discount,
+                'conditions' => $request->conditions,
                 'month' => Carbon::now()->get('month'),
                 'year' => Carbon::now()->get('year'),
                 'created_at' => Carbon::now(),
@@ -202,7 +215,7 @@ class ProductionController extends Controller
             $file_4->move($toupload,$namefile_4);
 
             DB::table('productions')->insert([
-                'id' => rand(1000000000, 10000000000),
+                'id' => $this->random,
                 'user_id' => $request->user_id,
                 'title' => Str::slug($request->img_for_fourth),
                 'name_products' => base64_encode($request->img_for_fourth),
@@ -216,6 +229,8 @@ class ProductionController extends Controller
                 'category_products' => $request->category_products,
                 'status' => $request->status,
                 'profits' => $request->profits,
+                'discount' => $request->discount,
+                'conditions' => $request->conditions,
                 'month' => Carbon::now()->get('month'),
                 'year' => Carbon::now()->get('year'),
                 'created_at' => Carbon::now(),
@@ -252,7 +267,7 @@ class ProductionController extends Controller
             $file_5->move($toupload,$namefile_5);
 
             DB::table('productions')->insert([
-                'id' => rand(1000000000, 10000000000),
+                'id' => $this->random,
                 'user_id' => $request->user_id,
                 'title' => Str::slug($request->img_for_five),
                 'name_products' => base64_encode($request->img_for_five),
@@ -267,6 +282,8 @@ class ProductionController extends Controller
                 'category_products' => $request->category_products,
                 'status' => $request->status,
                 'profits' => $request->profits,
+                'discount' => $request->discount,
+                'conditions' => $request->conditions,
                 'month' => Carbon::now()->get('month'),
                 'year' => Carbon::now()->get('year'),
                 'created_at' => Carbon::now(),
@@ -349,10 +366,39 @@ class ProductionController extends Controller
     public function manage(){
         App::setLocale(Auth()->user()->languange);
         $title = 'Manage My Products';
-        $product = Production::latest()->where('user_id', auth()->user()->id)->orderBy('updated_at', 'DESC')->get();
+        $product = Production::latest()->where('user_id', auth()->user()->id)->orderBy('updated_at', 'DESC')->paginate(25);
         $category = Category::latest()->orderBy('name', 'DESC')->get();
         return view('home.production.manage', compact('product', 'title', 'category'));
     }
+    public function manageProductionAPI(){
+        return Datatables::of(DB::table('productions')->where('user_id', Auth()->user()->id))->addIndexColumn()
+                    ->addColumn('action', function($row){
+                        $btn = '<a href="javascript:void(0)" data-toggle="modal"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct"><i class="fas fa-user-edit"></i></a>';
+                        $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct"><i class="fas fa-trash-alt"></i></a>';
+                        return $btn;
+                    })->rawColumns(['action'])->make(true);
+    }
+    public function dataProductionAPI($id){
+        $production = Production::find($id);
+        return response()->json($production);
+    }
+    public function updateProductionAPI(Request $request){
+        Production::where('id', $request->DATA)->update([
+            'name_products' => $request->nameDATA,
+            'price' => $request->priceDATA,
+            'discount' => $request->discountDATA,
+            'description_products' => $request->descriptionDATA,
+            'remaining_products' => $request->remainingDATA,
+            'updated_at' => Carbon::now(),
+        ]);
+        return response()->json(['success' => 'Edit product successfuly']);
+    }
+    public function deleteProductionAPI($id){
+        Production::find($id)->delete();
+        return response()->json(['success' => 'Delete product successfuly']);
+    }
+
+
     public function search(Request $request){
         App::setLocale(Auth()->user()->languange);
         $search = base64_encode($request->search);
@@ -377,7 +423,7 @@ class ProductionController extends Controller
             $toupload = 'db/img/';
             $file->move($toupload,$namefile);
         DB::table('questions')->insert([
-            'id' => rand(1000000000, 10000000000),
+            'id' => $this->random,
             'user_id' => $request->user_id,
             'production_id' => $request->production_id,
             'name' => $request->name,
@@ -390,7 +436,7 @@ class ProductionController extends Controller
         ]);
         }else{
         DB::table('questions')->insert([
-            'id' => rand(1000000000, 10000000000),
+            'id' => $this->random,
             'user_id' => $request->user_id,
             'production_id' => $request->production_id,
             'name' => $request->name,
@@ -470,7 +516,7 @@ class ProductionController extends Controller
     }
     public function buy(Request $request, Production $production){
         if($request->has('buy')){
-            $purchases = rand(100000000000, 1000000000000);
+            $purchases = $this->random;
             $total = $request->price * $request->remaining;
             $stock = $request->stock;
             $remain = $request->stock - $request->remaining;
@@ -482,7 +528,7 @@ class ProductionController extends Controller
             }
             if(Auth()->user()->saldo > $count){
                 foreach($product as $prod){
-                $id_purchases = rand(1000000000, 10000000000);
+                $id_purchases = $this->random;
                 DB::table('purchases')->insert([
                 'id' => $id_purchases,
                 'production_id' => $request->buy_products,
@@ -527,7 +573,7 @@ class ProductionController extends Controller
         }
             if($request->has('added')){
                 DB::table('carts')->insert([
-                    'id' => rand(1000000000, 10000000000),
+                    'id' => $this->random,
                     'user_id' => Auth()->user()->id,
                     'production_id' => base64_encode($request->add),
                     'amount' => $request->remaining,
@@ -557,7 +603,7 @@ class ProductionController extends Controller
                 'status' => 'false',
                 ]);
                 DB::table('messages')->insert([
-                    'id' => rand(1000000000,10000000000),
+                    'id' => $this->random,
                     'user_id' => Auth()->user()->id,
                     'from' => 'Customer Services',
                     'to' => Auth()->user()->email,
@@ -595,7 +641,7 @@ class ProductionController extends Controller
         public function cardPay(Request $request){
             $title = 'title';
             $showPay = DB::table('productions')->where('id', $request->buy_products)->get();
-            return view('home.production.cartPayment', compact('title', 'showPay', 'amount'));
+            return view('home.production.cartPayment', compact('title', 'showPay'));
         }
 
 /*------------------------------------------------------------*/

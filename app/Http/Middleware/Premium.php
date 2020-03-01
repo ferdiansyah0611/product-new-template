@@ -15,9 +15,9 @@ class Premium
      */
     public function handle($request, Closure $next)
     {
-        if($request->user()->role == 0){
+        if($request->user()->role == 3){
         return $next($request);
     }else
-    return redirect()->back();
+    return redirect()->back()->with(['error'=>"Your don't have access permission to access"]);
     }
 }

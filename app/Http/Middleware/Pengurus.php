@@ -18,6 +18,6 @@ class Pengurus
         if(Auth()->user()->role == 1){
         return $next($request);
     }else
-    return redirect()->back();
+    return redirect()->back()->with(['error'=>"Your don't have access permission to access"]);
     }
 }

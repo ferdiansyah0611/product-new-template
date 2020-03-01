@@ -36,7 +36,7 @@ class AuthController extends Controller
  
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
-            $idRandom = rand(1000000000, 10000000000);
+            $idRandom = rand(1000000,10000000);
             DB::table('session_logins')->insert([
                 'id' => $idRandom,
                 'user_id' => Auth()->user()->id,
@@ -44,18 +44,26 @@ class AuthController extends Controller
                 'on' => Carbon::now(),
             ]);
             $request->session()->put('id', $idRandom);
-            return redirect()->intended('dashboards')->with('success', 'Your has success login');
-        }
+            if(Auth()->user()->role == '2'){
+                return redirect()->route('admin.dashboardindex')->with('success', 'Your has success login');
+            }
+            elseif(Auth()->user()->role == '0'){
+                return redirect()->route('index')->with('success', 'Your has success login');
+            }
+            else{
+                return redirect()->route('member.dashboardindex')->with('success', 'Your has success login');
+            }
+        }//if
         return Redirect::to("login")->withSuccess('Oppes! You have entered invalid credentials');
     }
  
     public function postRegistration(Request $request)
     {  
         DB::table('users')->insert([
-            'id' => rand(1000000000,10000000000),
-            'user_id' => rand(1000000000,10000000000),
+            'id' => rand(1000000,10000000),
+            'user_id' => rand(1000000,10000000),
             'name' => $request->name,
-            'name_store' => Str::slug($request->name.'-store-').rand(1000000000,10000000000),
+            'name_store' => Str::slug($request->name.'-store-').rand(1000000,10000000),
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'born' => $request->born,

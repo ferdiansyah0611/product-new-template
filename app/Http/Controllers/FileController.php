@@ -9,6 +9,20 @@ use App;
 use Illuminate\Support\Facades\File;
 
 class FileController extends Controller{
+public $dirDOC;
+public $directory_image;
+public $directory_document;
+public $directory_video;
+public $directory_audio;
+public function __construct(){
+	//directory
+        $this->directory_image = storage_path('app/public/image');
+        $this->directory_document = storage_path('app/public/document');
+        $this->directory_video = storage_path('app/public/video');
+        $this->directory_audio = storage_path('app/public/audio');
+	$this->dirDOC = storage_path('app/public/document');
+	$this->middleware('auth');
+}
 public function viewWord(){
 	App::setLocale(Auth()->user()->languange);
 	$title = 'My word';
@@ -72,9 +86,8 @@ public function uploadFile(Request $request){
             'word' => 'required|max:10000|file|mimes:doc,docx'
         ]);
         $file = $request->file('word');
-        $namefile = "/db/doc/".$file->getClientOriginalName();
-        $toupload = 'db/doc/';
-        $file->move($toupload,$namefile);
+        $namefile = $file->getClientOriginalName();
+        $file->move($this->directory_document,$namefile);
         
         $dataFile = Files::all();
         foreach($dataFile as $fileData){
@@ -111,9 +124,8 @@ public function uploadFile(Request $request){
             'excel' => 'required|max:10000|file|mimes:xls,xlsx'
         ]);
         $file = $request->file('excel');
-        $namefile = "/db/doc/".$file->getClientOriginalName();
-        $toupload = 'db/doc/';
-        $file->move($toupload,$namefile);
+        $namefile = $file->getClientOriginalName();
+        $file->move($this->directory_document,$namefile);
         
         $dataFile = Files::all();
         foreach($dataFile as $fileData){
@@ -149,9 +161,8 @@ public function uploadFile(Request $request){
             'powerpoint' => 'required|max:10000|file|mimes:ppt,pptx'
         ]);
         $file = $request->file('powerpoint');
-        $namefile = "/db/doc/".$file->getClientOriginalName();
-        $toupload = 'db/doc/';
-        $file->move($toupload,$namefile);
+        $namefile = $file->getClientOriginalName();
+        $file->move($this->directory_document,$namefile);
         
         $dataFile = Files::all();
         foreach($dataFile as $fileData){
@@ -189,7 +200,7 @@ public function uploadFile(Request $request){
         $file = $request->file('image');
         $namefile = "/db/img/".$file->getClientOriginalName();
         $toupload = 'db/img/';
-        $file->move($toupload,$namefile);
+        $file->move($this->directory_image,$namefile);
         
         $dataFile = Files::all();
         foreach($dataFile as $fileData){
@@ -227,7 +238,7 @@ public function uploadFile(Request $request){
         $file = $request->file('video');
         $namefile = "/db/video/".$file->getClientOriginalName();
         $toupload = 'db/video/';
-        $file->move($toupload,$namefile);
+        $file->move($this->dirDOC,$namefile);
         
         $dataFile = Files::all();
         foreach($dataFile as $fileData){
@@ -257,14 +268,21 @@ public function uploadFile(Request $request){
         }//foreach
     }
 }
+public function updateFiles(Request $request){
+	DB::table('files')->where('id', $request->updateID)->update([
+		'name_file' => $request->nameFile,
+		'privacy' => $request->privacy,
+	]);
+	return redirect()->back()->with('success', 'Success update files');
+}
 public function deleteFiles(Request $request){
 	$dataDelete = Files::where('id', $request->fileID)->get();
 	foreach ($dataDelete as $data => $delete) {
-		File::delete(public_path().$delete->word);
-		File::delete(public_path().$delete->excel);
-		File::delete(public_path().$delete->powerpoint);
-		File::delete(public_path().$delete->image);
-		File::delete(public_path().$delete->video);
+		File::delete(storage_path('/app/public/document/').$delete->word);
+		File::delete(storage_path('/app/public/document/').$delete->excel);
+		File::delete(storage_path('/app/public/document/').$delete->powerpoint);
+		File::delete(storage_path('/app/public/document/').$delete->image);
+		File::delete(storage_path('/app/public/document/').$delete->video);
 		Files::where('id', $request->fileID)->delete();
 		return redirect()->back()->with('success', 'Successfuly delete file');
 	}

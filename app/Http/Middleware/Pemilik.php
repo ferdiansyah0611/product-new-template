@@ -18,6 +18,6 @@ class Pemilik
         if(Auth()->user()->role == 2){
         return $next($request);
     }else
-        return redirect()->back();
+        return redirect()->back()->with(['error'=>"Your don't have access permission to access"]);
     }
 }
