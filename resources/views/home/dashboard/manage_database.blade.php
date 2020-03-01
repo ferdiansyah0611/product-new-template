@@ -3,54 +3,86 @@
 <link rel="stylesheet" type="text/css" href="{{asset('/vendor/datatables/media/css/jquery.dataTables.css')}}">
 @endsection
 @section('content')
-<div class="col-md-8 card mx-auto table-responsive">
-    <div class="card-header"></div>
-        <div class="card-body">
-        <table class="table table-bordered table-striped table-hover" style="width:100%;">
-        <thead class="table-primary">
-            <tr>
-            <th>ID</th>
-            <th>Name Products</th>
-            <th>Usage Storage</th>
-            <th>Action</th>
-            </tr>
-        </thead>
-        @foreach ($qwerty as $p)
-        @if($p->size == Null)
-        @php
-        $data_user = DB::table('users')->get();
-        $count = filesize(public_path($p->main_pictures)) + filesize(public_path($p->second_pictures)) + filesize(public_path($p->three_pictures)) + filesize(public_path($p->fourth_pictures)) + filesize(public_path($p->five_pictures));
-        $kb = $count / 1000;
-        $max = '10000.000';
-        echo "<tbody>";
-            echo "<td>".$p->id."</td>";
-            echo "<td>".base64_decode($p->name_products)."</td>";
-            echo "<td>".$kb."</td>";
-            @endphp
-            <form action='{{route('dashboard.dbsavesize', $p->id)}}' method='POST'>@csrf
-            <input type='hidden' value='{{$kb}}' name="size">
-            <td><button type='submit' class="btn btn-success">Save</button></td>
-            </form>
-         </tbody>
-        @else
-        @php
-        $data_user = DB::table('users')->get();
-        $count = filesize(public_path($p->main_pictures)) + filesize(public_path($p->second_pictures)) + filesize(public_path($p->three_pictures)) + filesize(public_path($p->fourth_pictures)) + filesize(public_path($p->five_pictures));
-        $kb = $count / 1000;
-        $max = '10000.000';
-        echo "<tbody>";
-            echo "<td>".$p->id."</td>";
-            echo "<td>".base64_decode($p->name_products)."</td>";
-            echo "<td>".$kb."</td>";
-            @endphp
-            <td>You has been save</td>
-        @endif
-        @endforeach
-        </table>
+<div class="col-xl-12 card">
+    <div class="card-header">
+        <h5 class="card-title">Management Database</h5>
+    </div>
+    <div class="card-body">
+        <div class="card-block">
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>Name Database</th>
+                        <th>Connection</th>
+                        <th>Host</th>
+                        <th>Port</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><?php echo ENV('DB_DATABASE');?></td>
+                        <td><?php echo ENV('DB_CONNECTION');?></td>
+                        <td><?php echo ENV('DB_HOST');?></td>
+                        <td><?php echo ENV('DB_PORT');?></td>
+                        <td><?php echo ENV('DB_USERNAME');?></td>
+                        <td><?php echo ENV('DB_PASSWORD');?></td>
+                    </tr>
+                    <tr>
+                        <td><?php echo ENV('DB_DATABASE_2');?></td>
+                        <td><?php echo ENV('DB_CONNECTION_2');?></td>
+                        <td><?php echo ENV('DB_HOST_2');?></td>
+                        <td><?php echo ENV('DB_PORT_2');?></td>
+                        <td><?php echo ENV('DB_USERNAME_2');?></td>
+                        <td><?php echo ENV('DB_PASSWORD_2');?></td>
+                    </tr>
+                    <tr>
+                        <td><?php echo ENV('DB_DATABASE_MEMBER_1');?></td>
+                        <td><?php echo ENV('DB_CONNECTION_MEMBER_1');?></td>
+                        <td><?php echo ENV('DB_HOST_MEMBER_1');?></td>
+                        <td><?php echo ENV('DB_PORT_MEMBER_1');?></td>
+                        <td><?php echo ENV('DB_USERNAME_MEMBER_1');?></td>
+                        <td><?php echo ENV('DB_PASSWORD_MEMBER_1');?></td>
+                    </tr>
+                    <tr>
+                        <td><?php echo ENV('DB_DATABASE_MEMBER_2');?></td>
+                        <td><?php echo ENV('DB_CONNECTION_MEMBER_2');?></td>
+                        <td><?php echo ENV('DB_HOST_MEMBER_2');?></td>
+                        <td><?php echo ENV('DB_PORT_MEMBER_2');?></td>
+                        <td><?php echo ENV('DB_USERNAME_MEMBER_2');?></td>
+                        <td><?php echo ENV('DB_PASSWORD_MEMBER_2');?></td>
+                    </tr>
+                    <tr>
+                        <td><?php echo ENV('DB_DATABASE_MEMBER_3');?></td>
+                        <td><?php echo ENV('DB_CONNECTION_MEMBER_3');?></td>
+                        <td><?php echo ENV('DB_HOST_MEMBER_3');?></td>
+                        <td><?php echo ENV('DB_PORT_MEMBER_3');?></td>
+                        <td><?php echo ENV('DB_USERNAME_MEMBER_3');?></td>
+                        <td><?php echo ENV('DB_PASSWORD_MEMBER_3');?></td>
+                    </tr>
+                    <tr>
+                        <td><?php echo ENV('DB_DATABASE_MEMBER_4');?></td>
+                        <td><?php echo ENV('DB_CONNECTION_MEMBER_4');?></td>
+                        <td><?php echo ENV('DB_HOST_MEMBER_4');?></td>
+                        <td><?php echo ENV('DB_PORT_MEMBER_4');?></td>
+                        <td><?php echo ENV('DB_USERNAME_MEMBER_4');?></td>
+                        <td><?php echo ENV('DB_PASSWORD_MEMBER_4');?></td>
+                    </tr>
+                    <tr>
+                        <td><?php echo ENV('DB_DATABASE_MEMBER_5');?></td>
+                        <td><?php echo ENV('DB_CONNECTION_MEMBER_5');?></td>
+                        <td><?php echo ENV('DB_HOST_MEMBER_5');?></td>
+                        <td><?php echo ENV('DB_PORT_MEMBER_5');?></td>
+                        <td><?php echo ENV('DB_USERNAME_MEMBER_5');?></td>
+                        <td><?php echo ENV('DB_PASSWORD_MEMBER_5');?></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <div class="card-footer"></div>
+    </div>
 </div>
-@endsection
-@section('js')
-<script src="{{asset('/vendor/datatables/media/js/jquery.dataTables.js')}}"></script>
-@endsection
+    @endsection
+    @section('js')
+    <script src="{{asset('/vendor/datatables/media/js/jquery.dataTables.js')}}" defer></script>
+    @endsection
