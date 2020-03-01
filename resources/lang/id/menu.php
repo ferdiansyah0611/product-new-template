@@ -50,4 +50,13 @@ return [
     'calender' => 'Kalender',
     'logout' => 'Keluar',
     'readallmessages' => 'Baca Semua Pesan',
+
+    'file' => 'File',
+    'document' => 'Dokumen',
+    'word' => 'Word',
+    'excel' => 'Excel',
+    'powerpoint' => 'Powerpoint',
+    'media' => 'Media',
+    'image' => 'Gambar',
+    'video' => 'Video',
 ];

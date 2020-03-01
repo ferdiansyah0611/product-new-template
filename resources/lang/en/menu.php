@@ -50,4 +50,13 @@ return [
     'calendar' => 'Calendar',
     'logout' => 'Log out',
     'readallmessages' => 'Read All Messages',
+
+    'file' => 'File',
+    'document' => 'Documents',
+    'word' => 'Word',
+    'excel' => 'Excel',
+    'powerpoint' => 'Powerpoint',
+    'media' => 'Media',
+    'image' => 'Images',
+    'video' => 'Video',
 ];
