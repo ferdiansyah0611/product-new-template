@@ -66,7 +66,7 @@ class ViewController extends Controller
 	public function __construct()
 	{
         //middleware
-		$this->middleware('Pemilik');
+		$this->middleware(['Pemilik','auth']);
         //helping
         $this->random = rand(1000000,10000000);
         //directory
@@ -120,11 +120,41 @@ class ViewController extends Controller
         $usersdata = DB::table('users')->orderBy('created_at', 'DESC')->paginate('9');
         return view('home.dashboard.index', compact('title', 'notification_products', 'user', 'likers'), ['pu' => $purchase, 'users' => $usersdata]);
     }
+    //product
     public function createProduct()
     {
         App::setLocale(Auth()->user()->languange);
         $title = 'Create Products';
         $category = Category::latest()->orderBy('name', 'DESC')->get();
         return view('home.production.create', compact('title', 'category'));
+    }
+    public function RequestProducts()
+    {
+            App::setLocale(Auth()->user()->languange);
+            $title = 'title';
+            $production = Production::all();
+            $data_product_user = Production::where('user_id', Auth()->user()->id)->get();
+            return view('home.production.request', compact('title', 'production'), ['product_user' => $data_product_user]);
+        }
+    //cart
+    public function CartIndex()
+    {
+        App::setLocale(Auth()->user()->languange);
+        $title = 'Cart';
+        $cart = Cart::where('user_id', Auth()->user()->id)->get();
+        return view('home.production.cart', compact('title'), ['data' => $cart]);
+    }
+    //newseed
+    public function CreateNewseed()
+    {
+        $title = 'Create newseed';
+        $getData = DB::connection('mysql2')->table('newseed')->paginate(50);
+        return view('home.newseed.create', compact('title', 'getData'));
+    }
+    //object
+    public function CreateObject()
+    {
+        $title = 'Objects';
+        return view('home.objects.create', compact('title'));
     }
 }

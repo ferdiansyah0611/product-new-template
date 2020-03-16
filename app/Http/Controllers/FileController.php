@@ -7,78 +7,133 @@ use Illuminate\Support\Str;
 use App\Models\Files;
 use App;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
 
-class FileController extends Controller{
-public $dirDOC;
-public $directory_image;
-public $directory_document;
-public $directory_video;
-public $directory_audio;
-public function __construct(){
-	//directory
+class FileController extends Controller
+{
+    public $directory_image;
+    public $directory_document;
+    public $directory_video;
+    public $directory_audio;
+    public $random;
+    public $auth_id;
+    public $auth_name;
+    public $auth_email;
+    public $auth_languange;
+    public $auth_name_store;
+    public $auth_saldo;
+    public $auth_status;
+    public $auth_last_study;
+    public $auth_identity_card;
+    public $auth_debit_card;
+    public $auth_number;
+    public $auth_born;
+    public $auth_description;
+    public $auth_locate;
+    public $auth_gender;
+    public $auth_avatars;
+
+    public function __construct()
+    {
+        //middleware
+        $this->middleware(['auth','Pemilik']);
+        $this->middleware(['auth','Premium']);
+        //helping
+        $this->random = rand(1000000,10000000);
+        //directory
         $this->directory_image = storage_path('app/public/image');
         $this->directory_document = storage_path('app/public/document');
         $this->directory_video = storage_path('app/public/video');
         $this->directory_audio = storage_path('app/public/audio');
-	$this->dirDOC = storage_path('app/public/document');
-	$this->middleware('auth');
-}
-public function viewWord(){
+        //authenticate
+        $this->auth_id = Auth::user()?Auth::user()->id:null;
+        $this->auth_name = Auth::user()?Auth::user()->name:null;
+        $this->auth_email = Auth::user()?Auth::user()->email:null;
+        $this->auth_languange = Auth::user()?Auth::user()->languange:null;
+        $this->auth_name_store = Auth::user()?Auth::user()->name_store:null;
+        $this->auth_saldo = Auth::user()?Auth::user()->saldo:null;
+        $this->auth_status = Auth::user()?Auth::user()->status:null;
+        $this->auth_last_study = Auth::user()?Auth::user()->last_study:null;
+        $this->auth_identity_card = Auth::user()?Auth::user()->identity_card:null;
+        $this->auth_debit_card = Auth::user()?Auth::user()->debit_card:null;
+        $this->auth_number = Auth::user()?Auth::user()->number:null;
+        $this->auth_born = Auth::user()?Auth::user()->born:null;
+        $this->auth_description = Auth::user()?Auth::user()->description:null;
+        $this->auth_locate = Auth::user()?Auth::user()->locate:null;
+        $this->auth_gender = Auth::user()?Auth::user()->gender:null;
+        $this->auth_avatars = Auth::user()?Auth::user()->avatars:null;
+    }
+    public function viewWord()
+    {
 	App::setLocale(Auth()->user()->languange);
 	$title = 'My word';
 	$word = Files::where('user_id', Auth()->user()->id)->orderBy('updated_at', 'DESC')->paginate('25');
 	return view('home.file.word', compact('title','word'));
-}	public function file_managerWord(){
+    }
+    public function file_managerWord()
+    {
 	App::setLocale(Auth()->user()->languange);
 	$title = 'My word';
 	$word = Files::where('user_id', Auth()->user()->id)->orderBy('updated_at', 'DESC')->paginate('25');
 	return view('home.file.component.file_managerWord', compact('title','word'));
 	}
-public function viewexcel(){
+    public function viewexcel()
+    {
 	App::setLocale(Auth()->user()->languange);
 	$title = 'My excel';
 	$word = Files::where('user_id', Auth()->user()->id)->orderBy('updated_at', 'DESC')->paginate('25');
 	return view('home.file.excel', compact('title','word'));
-}	public function file_managerExcel(){
+    }
+    public function file_managerExcel()
+    {
 	App::setLocale(Auth()->user()->languange);
 	$title = 'My excel';
 	$word = Files::where('user_id', Auth()->user()->id)->orderBy('updated_at', 'DESC')->paginate('25');
 	return view('home.file.component.file_managerExcel', compact('title','word'));
 	}
-public function viewPowerpoint(){
+    public function viewPowerpoint()
+    {
 	App::setLocale(Auth()->user()->languange);
 	$title = 'My powerpoint';
 	$word = Files::where('user_id', Auth()->user()->id)->orderBy('updated_at', 'DESC')->paginate('25');
 	return view('home.file.powerpoint', compact('title','word'));
-}	public function file_managerPowerpoint(){
+    }
+    public function file_managerPowerpoint()
+    {
 	App::setLocale(Auth()->user()->languange);
 	$title = 'My powerpoint';
 	$word = Files::where('user_id', Auth()->user()->id)->orderBy('updated_at', 'DESC')->paginate('25');
 	return view('home.file.component.file_managerPowerpoint', compact('title','word'));
 	}
-public function viewImage(){
+    public function viewImage()
+    {
 	App::setLocale(Auth()->user()->languange);
 	$title = 'My image';
 	$word = Files::where('user_id', Auth()->user()->id)->orderBy('updated_at', 'DESC')->paginate('25');
 	return view('home.file.image', compact('title','word'));
-}	public function file_managerImage(){
+    }
+    public function file_managerImage()
+    {
 	App::setLocale(Auth()->user()->languange);
 	$title = 'My image';
 	$word = Files::where('user_id', Auth()->user()->id)->orderBy('updated_at', 'DESC')->paginate('25');
 	return view('home.file.component.file_managerImage', compact('title','word'));
 	}
-public function viewVideo(){
+    public function viewVideo()
+    {
 	App::setLocale(Auth()->user()->languange);
 	$title = 'My video';
 	$word = Files::where('user_id', Auth()->user()->id)->orderBy('updated_at', 'DESC')->paginate('25');
 	return view('home.file.video', compact('title','word'));
-}	public function file_managerVideo(){
+    }
+    public function file_managerVideo(){
 	App::setLocale(Auth()->user()->languange);
 	$title = 'My video';
 	$word = Files::where('user_id', Auth()->user()->id)->orderBy('updated_at', 'DESC')->paginate('25');
 	return view('home.file.component.file_managerVideo', compact('title','word'));
 	}
-public function uploadFile(Request $request){
+    public function uploadFile(Request $request)
+    {
 	if($request->file('word')){
             $this->validate($request, [
             'fileName' => 'required|string',
@@ -104,7 +159,7 @@ public function uploadFile(Request $request){
         	}
         	else{
         	DB::table('files')->insert([
-        	'id' => rand(1000000000, 10000000000),
+        	'id' => $this->random,
         	'user_id' => Auth()->user()->id,
         	'name_file' => $request->fileName,
         	'privacy' => $request->privacy,
@@ -142,7 +197,7 @@ public function uploadFile(Request $request){
         	}
         	else{
         	DB::table('files')->insert([
-        	'id' => rand(1000000000, 10000000000),
+        	'id' => $this->random,
         	'user_id' => Auth()->user()->id,
         	'name_file' => $request->fileName,
         	'privacy' => $request->privacy,
@@ -179,7 +234,7 @@ public function uploadFile(Request $request){
         	}
         	else{
         	DB::table('files')->insert([
-        	'id' => rand(1000000000, 10000000000),
+        	'id' => $this->random,
         	'user_id' => Auth()->user()->id,
         	'name_file' => $request->fileName,
         	'privacy' => $request->privacy,
@@ -217,7 +272,7 @@ public function uploadFile(Request $request){
         	}
         	else{
         	DB::table('files')->insert([
-        	'id' => rand(1000000000, 10000000000),
+        	'id' => $this->random,
         	'user_id' => Auth()->user()->id,
         	'name_file' => $request->fileName,
         	'privacy' => $request->privacy,
@@ -238,7 +293,7 @@ public function uploadFile(Request $request){
         $file = $request->file('video');
         $namefile = "/db/video/".$file->getClientOriginalName();
         $toupload = 'db/video/';
-        $file->move($this->dirDOC,$namefile);
+        $file->move($this->directory_video,$namefile);
         
         $dataFile = Files::all();
         foreach($dataFile as $fileData){
@@ -255,7 +310,7 @@ public function uploadFile(Request $request){
         	}
         	else{
         	DB::table('files')->insert([
-        	'id' => rand(1000000000, 10000000000),
+        	'id' => $this->random,
         	'user_id' => Auth()->user()->id,
         	'name_file' => $request->fileName,
         	'privacy' => $request->privacy,
@@ -267,24 +322,26 @@ public function uploadFile(Request $request){
         	}
         }//foreach
     }
-}
-public function updateFiles(Request $request){
+    }
+    public function updateFiles(Request $request)
+    {
 	DB::table('files')->where('id', $request->updateID)->update([
 		'name_file' => $request->nameFile,
 		'privacy' => $request->privacy,
 	]);
 	return redirect()->back()->with('success', 'Success update files');
-}
-public function deleteFiles(Request $request){
+    }
+    public function deleteFiles(Request $request)
+    {
 	$dataDelete = Files::where('id', $request->fileID)->get();
 	foreach ($dataDelete as $data => $delete) {
 		File::delete(storage_path('/app/public/document/').$delete->word);
 		File::delete(storage_path('/app/public/document/').$delete->excel);
 		File::delete(storage_path('/app/public/document/').$delete->powerpoint);
-		File::delete(storage_path('/app/public/document/').$delete->image);
-		File::delete(storage_path('/app/public/document/').$delete->video);
+		File::delete(storage_path('/app/public/image/').$delete->image);
+		File::delete(storage_path('/app/public/video/').$delete->video);
 		Files::where('id', $request->fileID)->delete();
 		return redirect()->back()->with('success', 'Successfuly delete file');
 	}
-}
+    }
 }

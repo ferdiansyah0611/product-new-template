@@ -149,7 +149,7 @@ class ApiController extends Controller
     {
         return Datatables::of(User::query())->addIndexColumn()
                     ->addColumn('action', function($row){
-                           $btn = '<a href="javascript:void(0)" data-toggle="modal"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editUser" data-target="#editUserModal"><i class="fas fa-user-edit"></i></a>';
+                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editUser"><i class="fas fa-user-edit"></i></a>';
                            $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteUser"><i class="fas fa-trash-alt"></i></a>';
                         return $btn;
                     })->rawColumns(['action'])->make(true);
@@ -183,6 +183,26 @@ class ApiController extends Controller
         return response()->json(['success' => 'Successfuly delete data']);
     }
     //category
+    public function GetCategory()
+    {
+        $data = Category::get();
+        return response()->json($data);
+    }
+    public function GetObjectDataID($id)
+    {
+        $data = DB::table('objects')->where('category_id',$id)->pluck('merk');
+        return response()->json($data);
+    }
+    public function GetObjectData($name)
+    {
+        $data = DB::table('objects')->where('merk',$name)->get();
+        return response()->json($data);
+    }
+    public function GetObjectDataFUll($name,$series)
+    {
+        $data = DB::table('objects')->where('merk',$name)->where('series',$series)->first();
+        return response()->json($data);
+    }
     public function DataCategory()
     {
         return Datatables::of(Category::query())->addIndexColumn()
@@ -233,5 +253,38 @@ class ApiController extends Controller
             'updated_at' => Carbon::now(),
         ]);
         return response()->json(['success'=>'Create number saldo successfully']);
+    }
+    //files
+    public function DataFile()
+    {
+        $image = Files::where('user_id',Auth()->user()->id)->paginate(20);
+        return response()->json($image);
+    }
+    //test
+    public function test()
+    {
+        $title = 'test';
+        return view('home.test',compact('title'));
+    }
+    public function testUpload(Request $request)
+    {
+        $this->validate($request,[
+            'test.*' => 'file|image|mimes:jpg,png,jpeg|max:10000'
+        ]);
+        foreach($request->file('test.*') as $file){
+            $namefile = $file->getClientOriginalName();
+            $name = array($file->getClientOriginalName());
+            $toupload = $this->directory_image;
+            $file->move($toupload,$namefile);
+        }
+        return response(['success'=>'berhasil','file'=>$request->file('test')]);
+    }
+    public function FileImageGet(Request $request)
+    {
+        if($request->has('term')){
+            $data = Files::where('user_id',Auth()->user()->id)->where('image','LIKE','%'.$request->has('term').'%')->pluck('image');
+        return response()->json($data);
+        }
+        
     }
 }

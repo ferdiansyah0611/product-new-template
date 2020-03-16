@@ -38,6 +38,7 @@ use App\Models\Saldo;
 use App\Models\SessionDisplay;
 use App\Models\SessionLogin;
 use App\Models\Setting;
+use App\Models\Merk;
 use App\User;
 
 class RequestController extends Controller
@@ -104,12 +105,62 @@ class RequestController extends Controller
         ]);
         return response()->json(['success', 'Add category successfully']);
     }
+    public function CreateDataObject(Request $request)
+    {
+        $now = Carbon::now();
+        $sizeArray   = array(
+                    'height'    =>  $request->height. $request->type_height,
+                    'width'     =>  $request->width. $request->type_width,
+                    );
+        $dateArray   = array(
+                    'day'       =>  Carbon::parse($request->release)->get('day'),
+                    'month'     =>  Carbon::parse($request->release)->get('month'),
+                    'year'      =>  Carbon::parse($request->release)->get('year'),
+                    );
+        $size       =   json_encode($sizeArray);
+        $date       =   json_encode($dateArray);
+        DB::table('objects')->insert([
+            'id'            =>  $this->random,
+            'category_id'   =>  $request->category,
+            'merk'          =>  $request->merk,
+            'series'        =>  $request->series,
+            'version'       =>  $request->version,
+            'size'          =>  $size,
+            'date'          =>  $date,
+            'created_at'    =>  $now,
+            'updated_at'    =>  $now,
+        ]);
+        return response()->json(['success'=>'successfully']);
+    }
+    public function CreateDataMerk(Request $request)
+    {
+        $data = Merk::all();
+        foreach($data as $d)
+        {
+            if($request->merk !== $d->merk)
+            {
+                DB::table('merks')->insert([
+                    'id'            =>  $this->random,
+                    'category_id'   =>  $request->category_id,
+                    'merk'          =>  $request->merk,
+                    'created_at'    =>  Carbon::now(),
+                    'updated_at'    =>  Carbon::now(),
+                ]);
+                return response()->json(['success'=>'successfully']);
+                
+            }
+            else
+            {
+                return response()->json(['error'=>'have']);
+            }
+        }
+    }
     public function UpdateCategory(Request $request, Category $category)
     {
     	Category::where('id', $category->id)->update([
-                'name' => $request->update_category,
-                'display' => $request->display,
-                'updated_at' => Carbon::now(),
+                'name'          => $request->update_category,
+                'display'       => $request->display,
+                'updated_at'    => Carbon::now(),
             ]);
             Production::where('category_products', $category->name)->update([
                 'category_products' => $request->update_category,
@@ -124,46 +175,46 @@ class RequestController extends Controller
     //users request
     public function CreateRequestUser(Request $request){
         DB::table('users')->insert([
-            'id' => rand(1000000000000,10000000000000),
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make(),
-            'role' => $request->role,
-            'saldo' => $request->saldo,
-            'locate' => $request->locate,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'id'            => rand(1000000000000,10000000000000),
+            'name'          => $request->name,
+            'email'         => $request->email,
+            'password'      => Hash::make(),
+            'role'          => $request->role,
+            'saldo'         => $request->saldo,
+            'locate'        => $request->locate,
+            'created_at'    => Carbon::now(),
+            'updated_at'    => Carbon::now(),
         ]);
         return response()->json(['success' => 'successfully']);
     }
     public function UpdateUsers(Request $request, User $user)
     {
         $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required',
-            'status' => 'required',
-            'role' => 'required',
-            'last_study' => 'required',
+            'name'          => 'required',
+            'email'         => 'required',
+            'status'        => 'required',
+            'role'          => 'required',
+            'last_study'    => 'required',
             'identity_card' => 'string',
-            'debit_card' => 'string',
-            'number' => 'required',
-            'born' => 'required',
-            'description' => 'required',
-            'locate' => 'required',
+            'debit_card'    => 'string',
+            'number'        => 'required',
+            'born'          => 'required',
+            'description'   => 'required',
+            'locate'        => 'required',
         ]);
         DB::table('users')->where('id', $user->id)->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'status' => $request->status,
-            'last_study' => $request->last_study,
-            'role' => $request->role,
+            'name'          => $request->name,
+            'email'         => $request->email,
+            'status'        => $request->status,
+            'last_study'    => $request->last_study,
+            'role'          => $request->role,
             'identity_card' => $request->identity_card,
-            'debit_card' => $request->debit_card,
-            'number' => $request->number,
-            'born' => $request->born,
-            'description' => $request->description,
-            'locate' => $request->locate,
-            'updated_at' => Carbon::now(),
+            'debit_card'    => $request->debit_card,
+            'number'        => $request->number,
+            'born'          => $request->born,
+            'description'   => $request->description,
+            'locate'        => $request->locate,
+            'updated_at'    => Carbon::now(),
         ]);
         return redirect()->route('production.index')->with('success', 'Your has been update users');
     }
@@ -202,7 +253,7 @@ class RequestController extends Controller
         return redirect()->back();
     }
     //product request
-    public function CreateDataProduct(Request $request, Production $production)
+    /*public function CreateDataProduct(Request $request, Production $production)
     {
         $this->validate($request, [
                 'user_id' => 'string',
@@ -439,5 +490,41 @@ class RequestController extends Controller
             ]);
             return redirect()->route('index')->with('success', 'Added Products successfuly');
         }//end if
+    }*/
+    public function CreateDataProduct(Request $request)
+    {
+        $array_image = array(
+            'image_1'=>$request->img1,
+            'image_2'=>$request->img2,
+            'image_3'=>$request->img3,
+            'image_4'=>$request->img4,
+            'image_5'=>$request->img5,
+            'image_6'=>$request->img6,
+            'image_7'=>$request->img7,
+            'image_8'=>$request->img8,
+            'image_9'=>$request->img9,
+            'image_10'=>$request->img10,
+        );
+        $json_image = json_encode($array_image);
+        DB::table('productions')->insert([
+            'id'=>$this->random,
+            'user_id'=>Auth()->user()->id,
+            'title'=>Str::slug($request->product_name),
+            'name_products'=>$request->product_name,
+            'price'=>$request->price,
+            'description_products'=>$request->description_products,
+            'main_pictures'=>$json_image,
+            'profits'=>$request->profits,
+            'discount'=>$request->discount,
+            'conditions'=>$request->conditions,
+            'status'=>$request->status,
+            'remaining_products'=>$request->remaining_products,
+            'category_products'=>$request->category_products,
+            'month' => Carbon::now()->get('month'),
+            'year' => Carbon::now()->get('year'),
+            'created_at'=>Carbon::now(),
+            'updated_at'=>Carbon::now(),
+        ]);
+        return response()->json(['success'=>'success']);
     }
 }

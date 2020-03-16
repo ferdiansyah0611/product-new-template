@@ -53,4 +53,16 @@ class HomeController extends Controller
         $productData = Production::where('title','like',"%".$search."%")->paginate(20);
         return response()->json($productData);
     }
+    public function searchuser(Request $request){
+        App::setLocale('en');
+        $search = $request->search;
+        $userData = User::where('name','like',"%".$search."%")->paginate(20);
+        return response()->json($userData);
+    }
+    public function searchproduct(Request $request){
+        App::setLocale('en');
+        $search = $request->search;
+        $productData = Production::where('title','like',"%".$search."%")->orWhere('category_products','like',"%".$search."%")->orWhere('price','like',"%".$search."%")->paginate(20);
+        return response()->json($productData);
+    }
 }

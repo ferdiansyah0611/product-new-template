@@ -515,13 +515,12 @@ class ProductionController extends Controller
         return view('home.production.category', compact('title', 'search'), ['category' => $products_category]);
     }
     public function buy(Request $request, Production $production){
-        if($request->has('buy')){
             $purchases = $this->random;
-            $total = $request->price * $request->remaining;
-            $stock = $request->stock;
+            $stock  = $request->stock;
+            $total  = $request->price * $request->remaining;
             $remain = $request->stock - $request->remaining;
-            $count =  Auth()->user()->saldo - $total;
-            $me = (2/100)*$total;
+            $count  = Auth()->user()->saldo - $total;
+            $me     = (2/100)*$total;
             $product = DB::table('productions')->where('id', $production->id)->get();
             if(Auth()->user()->saldo < $count){
                 return back();
@@ -531,7 +530,7 @@ class ProductionController extends Controller
                 $id_purchases = $this->random;
                 DB::table('purchases')->insert([
                 'id' => $id_purchases,
-                'production_id' => $request->buy_products,
+                'production_id' => $production->id,
                 'purchase_id' => $purchases,
                 'user_id' => Auth()->user()->id,
                 'price' => $request->price,
@@ -556,10 +555,8 @@ class ProductionController extends Controller
                 'notification' => 'Your has been buy products with id purchases '.$id_purchases,
                 'created_at' => Carbon::now(),
             ]);
-                
-            
             foreach($product as $pro){
-                DB::table('productions')->where('id', $production->id)->update([
+                DB::table('productions')->where('id', $pro->id)->update([
                     'remaining_products' => $remain,
                     'sold_out' => $pro->sold_out + $request->remaining,
                 ]);
@@ -569,25 +566,7 @@ class ProductionController extends Controller
                 'saldo' => $count,
             ]);
                return redirect()->back()->with('success', 'Your has been buy products with ID Purchase '.$purchases);
-            }
-        }
-            if($request->has('added')){
-                DB::table('carts')->insert([
-                    'id' => $this->random,
-                    'user_id' => Auth()->user()->id,
-                    'production_id' => base64_encode($request->add),
-                    'amount' => $request->remaining,
-                    'totals' => $request->remaining * $request->prices,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ]);
-                return redirect()->back()->with('success', 'Your has been add cart');
-            }
-            if($request->has('delete_cart')){
-                Cart::where('id', $request->delete_cart)->delete();
-                return redirect()->back()->with('success', 'Your has been delete cart');
-            }
-            
+            } 
         }
         public function isi_saldo(Request $request){
         $random = DB::table('saldos')->where('random', $request->number)->get();

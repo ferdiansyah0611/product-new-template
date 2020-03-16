@@ -196,7 +196,7 @@ class ProfileController extends Controller
             'locate' => $request->locate,
             'updated_at' => Carbon::now(),
         ]);
-        return redirect()->route('production.index')->with('success', 'Your has been update account');
+        return redirect()->route('index')->with('success', 'Your has been update account');
     }
     public function display_set(){
         App::setLocale(Auth()->user()->languange);
