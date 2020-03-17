@@ -86,7 +86,7 @@ headers: {
 var tabel = $('#users-table').DataTable({
 processing: true,
 serverSide: true,
-ajax: "{{route('admin.api_usersmanage')}}",
+ajax: "{{route('admin.api.usersmanage')}}",
 columns: [
 { data: 'id', name: 'id' },
 { data: 'name', name: 'name' },
@@ -101,6 +101,7 @@ tabel.draw();
 });
 $('body').on('click', '.editUser', function(){
 var user_id = $(this).data('id');
+$('#editUserModal').modal('show');
 $.get("{{url('/admin/api-admin/get/user-data')}}"+'/'+user_id, function(data){
 $('input[name=DATA]').val(data.id);
 $('input[name=nameDATA]').val(data.name);
@@ -120,17 +121,17 @@ $('input[name=descriptionDATA]').val(data.description);
 $('#updateUser').click(function(e){
 e.preventDefault();
 $.ajax({
-url:"{{route('admin.api_userupdate')}}",
+url:"{{route('admin.api.userupdate')}}",
 type: 'post',
 data: $('#formEditUser').serialize(),
 success: function(response)
 {
-$('#editUserModal').modal("hide");
-setTimeout(function(){
-$('#alert').html('<div class="alert alert-success alert-dismissible fade in mb-2" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Well done!</strong> '+response.success+'</div>');
-}, 1000);
-
-tabel.draw();
+    tabel.draw();
+    $('#editUserModal').modal('hide');
+    setTimeout(function(){
+        $('#alert').html('<div class="alert alert-success alert-dismissible fade in mb-2" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Well done!</strong> '+response.success+'</div>');
+    }, 1000);
+    //$('.modal-backdrop').css('display','none');
 },
 error: function(e)
 {

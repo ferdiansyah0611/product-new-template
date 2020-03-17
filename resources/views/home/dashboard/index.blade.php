@@ -128,7 +128,11 @@
                 Profile
             </div>
             <div class="card-body" style="padding:5px;">
+            @if(Auth()->user()->avatars == null)
+            <img src="{{asset('user-default.png')}}" alt="" style="border-radius: 50%;height: 180px;width: 100%;">
+            @else
             <img src="{{asset(Auth()->user()->avatars)}}" alt="" style="border-radius: 50%;height: 180px;width: 100%;">
+            @endif
             <p>{{Auth()->user()->email}}</p>
             <p>{{Auth()->user()->status}}</p>
             <p>{{Auth()->user()->born}}</p>
@@ -284,6 +288,7 @@
     
 </div>
 <div class="row match-height">
+@if(Auth()->user()->role == '2')
 <div class="font-12 col-xl-8 col-lg-12">
   <div class="card">
       <div class="card-header border-0">
@@ -328,6 +333,7 @@
       </div><!-- /.card-body -->
     </div>
   </div><!-- /.card --><!-- /.Left col -->
+  @endif
   <div class="col-xl-4 col-md-12 col-sm-12">
         <div class="card">
             <div class="card-body">
@@ -360,6 +366,7 @@
         </div>
     </div>
 </div>
+@if(Auth()->user()->role == '2')
 <div class="row">
   <div class="card col-xl-8 col-lg-12">
     <div class="card-header">
@@ -401,7 +408,6 @@
       </div><!-- /.users-list -->
     </div><!-- /.card-body -->  
   </div><!--/.card col-xl-8 col-lg-12 -->
-    @if(Auth()->user()->role == '2')
   <div class="col-xl-4 col-md-12 col-sm-12">
     <div class="card">
     <div class="card-header border-0">
@@ -411,7 +417,7 @@
     </div>
     <div class="card-body">
       <div class="card-block">
-      <form action="{{route('admin.api_createdatasaldo')}}" method="POST">@csrf
+      <form action="{{route('admin.api.createdatasaldo')}}" method="POST">@csrf
         <input type="number" name="saldo" class="form-control col-xl-6 float-left mt-1" placeholder="Input number in money...">
         <input type="date" name="expired" class="form-control col-xl-6 float-left mt-1">
         <button type="submit" class="btn btn-primary col-xl-12 mt-1">New</button>
@@ -420,8 +426,8 @@
     </div><!-- /.card-body -->
     </div><!-- /.card -->
   </div><!-- col-xl-4 col-md-12 col-sm-12 -->
-    @endif
 </div><!-- row -->
+@endif
 @endsection
 @section('js')
 <script src="{{asset('/vendor/template/plugins/chart.js/Chart.min.js')}}"></script>
@@ -755,7 +761,7 @@ $(function(){
   var tabelCategory = $('#tableCategory').DataTable({
     serverSide:true,
     processing:true,
-    ajax:"{{route('admin.api_categorymanage')}}",
+    ajax:"{{route('admin.api.categorymanage')}}",
     columns:[
     {data:'name',name:'name'},
     {data:'display',name:'display'},
@@ -765,7 +771,7 @@ $(function(){
   $('#addCategory').click(function(e){
     e.preventDefault();
     $.ajax({
-    url: "{{route('admin.api_categorycreatedata')}}",
+    url: "{{route('admin.api.categorycreatedata')}}",
     method: 'post',
     data: $('#myForm').serialize(),
     success: function(e){
@@ -792,7 +798,7 @@ $(function(){
   });
 
   setInterval(function(){
-    $.get("{{route('admin.api_topdashboards')}}", function(data) {
+    $.get("{{route('admin.api.topdashboards')}}", function(data) {
       $('#myProducts').html(data.data.my_products);
       $('#allUsers').html(data.data.all_users);
       $('#myOrders').html(data.data.my_orders);

@@ -74,7 +74,7 @@ $(function(){
   $('#select2').select2({
     placeholder:'Select one',
     ajax:{
-      url: "{{route('admin.api_topdashboards')}}",
+      url: "{{route('admin.api.topdashboards')}}",
       dataType: 'json',
       processResults: function (data) {
             return {

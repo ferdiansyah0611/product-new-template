@@ -139,7 +139,10 @@ text-decoration: underline;
             
             ?>
             <div class="tag tag-pill tag-danger" style="position: absolute;border-radius: 0;right: 14px;"><?php if($pro->discount == true){echo "-".$pro->discount."%";}?></div>
-            <img src="{{asset($pro->main_pictures)}}" class="img-col-xl-3">
+            <?php
+            $picture = json_decode($pro->main_pictures, true);
+            ?>
+            <img src="<?php echo url('storage/image/'.$picture['image_1']);?>" class="img-col-xl-3">
             <div class="card-footer custom-card-footer p-0">
               <a class="title-col-xl-3 hover-underline"  href="{{url('/productions/views', $pro->title)}}" style="font-size: 19px;font-family: 'Cuprum-Regular';">{{$pro->name_products}}</a>
               @if($pro->remaining_products > 0)
@@ -252,7 +255,7 @@ text-decoration: underline;
             
             ?>
             <div class="tag tag-pill tag-danger" style="position: absolute;border-radius: 0;right: 14px;"><?php if($pro->discount == true){echo "-".$pro->discount."%";}?></div>
-            <img src="{{asset($pro->main_pictures)}}" class="img-col-xl-3">
+            <img src="{{url('storage/image/'.$pro->main_pictures)}}" class="img-col-xl-3">
             <div class="card-footer custom-card-footer p-0">
               <a class="title-col-xl-3 hover-underline"  href="{{url('/productions/views', $pro->title)}}" style="font-size: 19px;font-family: 'Cuprum-Regular';">{{$pro->name_products}}</a>
               @if($pro->remaining_products > 0)

@@ -79,7 +79,7 @@ $(function(){
     var tabel = $('#production-table').DataTable({
     processing: true,
     serverSide: true,
-    ajax: "{{route('admin.api_productmanage')}}",
+    ajax: "{{route('admin.api.productmanage')}}",
     columns: [
         { data: 'name_products', name: 'name_products' },
         { data: 'price', name: 'price' },
@@ -107,16 +107,16 @@ $(function(){
     });//edit modal
     $('#submitEditProduct').click(function(){
     $.ajax({
-        url: "{{route('admin.api_updateproduct')}}",
+        url: "{{route('admin.api.updateproduct')}}",
         type:'post',
         data:$('#formEditProduct').serialize(),
         success:function(response)
         {
         tabel.draw();
         $('#editProducts').modal("hide");
-    setTimeout(function(){
-        $('#alert').html('<div class="alert alert-success alert-dismissible fade in mb-2" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Well done!</strong> '+response.success+'</div>');
-    }, 1000);
+        setTimeout(function(){
+            $('#alert').html('<div class="alert alert-success alert-dismissible fade in mb-2" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Well done!</strong> '+response.success+'</div>');
+        }, 1000);
     },
         error:function(e)
         {
@@ -156,7 +156,7 @@ $(function(){
     var tabel = $('#production-table').DataTable({
     processing: true,
     serverSide: true,
-    ajax: "{{route('member.api_productmanage')}}",
+    ajax: "{{route('member.api.productmanage')}}",
     columns: [
         { data: 'name_products', name: 'name_products' },
         { data: 'price', name: 'price' },

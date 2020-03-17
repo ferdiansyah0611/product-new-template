@@ -21,8 +21,12 @@
 		<div class="card-body">
 		<div class="card-block">
 			<div class="col-xl-2 col-md-2 col-xs-3">
-				<img src="{{asset($user->avatars)}}" style="border-radius: 50%;height: 100px;">
-			</div>
+        @if($user->avatars == null)
+				<img src="{{url('user-default.png')}}" style="border-radius: 50%;height: 100px;">
+			 @else
+       <img src="{{asset($user->avatars)}}" style="border-radius: 50%;height: 100px;">
+      @endif
+      </div>
 			<div class="col-xl-10 col-md-10 col-xs-9">
 				<p class="text-white">
 					<i class="icon-ios-paper" style="font-size: 20px;"></i>
@@ -77,7 +81,7 @@
 		<div class="col-xl-3 float-left">
 		<div class="wow fadeInDown float-left hover-style" data-wow-duration="1s">
               <a class="title-col-xl-3"  href="{{url('/productions/views', $product->title)}}">{{base64_decode($product->name_products)}}</a>
-              <img src="{{asset($product->main_pictures)}}" class="img-col-xl-3">
+              <img src="{{url('storage/image/'.$product->main_pictures)}}" class="img-col-xl-3">
               <div class="card-footer custom-card-footer">
             <!----<button class="float-left btn-secondary"><i class="far fa-thumbs-up">Likes</i></button>
             <button class="btn-secondary"><i class="far fa-comments">Comments</i></button>
@@ -141,7 +145,7 @@
         		echo "<td class='text-truncate'>Word</td>";
         		echo "<td class='text-truncate'>".$d->version."</td>";
         		echo "<td class='text-truncate'>".$d->updated_at."</td>";
-        		echo "<td class='text-truncate'>".File::size(public_path($d->word))." bytes</td>";
+        		echo "<td class='text-truncate'>".File::size(storage_path('app/public/document/'.$d->word))." bytes</td>";
         		echo "<td class='text-truncate'><button type='button' class='btn btn-danger'><a href='".asset($d->word)."' class='text-white' download>Download</a></button></td>";
         		echo "</tr>";
         	}
@@ -151,7 +155,7 @@
         		echo "<td class='text-truncate'>Excel</td>";
         		echo "<td class='text-truncate'>".$d->version."</td>";
         		echo "<td class='text-truncate'>".$d->updated_at."</td>";
-        		echo "<td class='text-truncate'>".File::size(public_path($d->excel))." bytes</td>";
+        		echo "<td class='text-truncate'>".File::size(storage_path('app/public/document/'.$d->excel))." bytes</td>";
         		echo "<td class='text-truncate'><button type='button' class='btn btn-danger'><a href='".asset($d->excel)."' class='text-white' download>Download</a></button></td>";
         		echo "</tr>";
         		}
@@ -161,7 +165,7 @@
         		echo "<td class='text-truncate'>Powerpoint</td>";
         		echo "<td class='text-truncate'>".$d->version."</td>";
         		echo "<td class='text-truncate'>".$d->updated_at."</td>";
-        		echo "<td class='text-truncate'>".File::size(public_path($d->powerpoint))." bytes</td>";
+        		echo "<td class='text-truncate'>".File::size(storage_path('app/public/document/'.$d->powerpoint))." bytes</td>";
         		echo "<td class='text-truncate'><button type='button' class='btn btn-danger'><a href='".asset($d->powerpoint)."' class='text-white' download>Download</a></button></td>";
         		echo "</tr>";
         		}
@@ -171,7 +175,7 @@
         		echo "<td class='text-truncate'>Image</td>";
         		echo "<td class='text-truncate'>".$d->version."</td>";
         		echo "<td class='text-truncate'>".$d->updated_at."</td>";
-        		echo "<td class='text-truncate'>".File::size(public_path($d->image))." bytes</td>";
+        		echo "<td class='text-truncate'>".File::size(storage_path('app/public/image/'.$d->image))." bytes</td>";
         		echo "<td class='text-truncate'><button type='button' class='btn btn-danger'><a href='".asset($d->image)."' class='text-white' download>Download</a></button></td>";
         		echo "</tr>";
         		}
@@ -181,7 +185,7 @@
         		echo "<td class='text-truncate'>Word</td>";
         		echo "<td class='text-truncate'>".$d->version."</td>";
         		echo "<td class='text-truncate'>".$d->updated_at."</td>";
-        		echo "<td class='text-truncate'>".File::size(public_path($d->video))." bytes</td>";
+        		echo "<td class='text-truncate'>".File::size(storage_path('app/public/video/'.$d->video))." bytes</td>";
         		echo "<td class='text-truncate'><a href='".asset($d->video)."' class='text-white' download><button type='button' class='btn btn-danger'>Download</button></a></td>";
         		echo "</tr>";
         		}

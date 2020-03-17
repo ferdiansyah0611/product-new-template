@@ -40,71 +40,465 @@ max-height: 300px;cursor: zoom-in;transition: 2s all ease-in-out;}
 @endsection
 @section('content')
 <div class="container">
-  <div class="row match-height">
-    <div class="col-xl-5 float-left" style="border-radius: 0;box-shadow:none;">
+  <div class="row match-height" style="padding-right: 1em;">
+    <div class="col-xl-5 float-left" style="border-radius: 0;box-shadow:none;padding: 0;">
       <div class="card">
         <!-- Full-width images with number text -->
-        @if($show->main_pictures == true)
-        <div class="mySlides">
-          <div class="numbertext">1 / 5</div>
-          <img src="{{asset($show->main_pictures)}}" class="item-img">
-        </div>
-        @endif
-        @if($show->second_pictures == true)
-        <div class="mySlides">
-          <div class="numbertext">2 / 5</div>
-          <img src="{{asset($show->second_pictures)}}" class="item-img">
-        </div>
-        @endif
-        @if($show->three_pictures == true)
-        <div class="mySlides">
-          <div class="numbertext">3 / 5</div>
-          <img src="{{asset($show->three_pictures)}}" class="item-img">
-        </div>
-        @endif
-        @if($show->fourth_pictures == true)
-        <div class="mySlides">
-          <div class="numbertext">4 / 5</div>
-          <img src="{{asset($show->fourth_pictures)}}" class="item-img">
-        </div>
-        @endif
-        @if($show->five_pictures == true)
-        <div class="mySlides">
-          <div class="numbertext">5 / 5</div>
-          <img src="{{asset($show->five_pictures)}}" class="item-img">
-        </div>
-        @endif
+        <?php  $data = json_decode($show->main_pictures, true);
+          if($data['image_1'] !== null && $data['image_2'] == null)
+          {
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>1 / 1</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_1']."' class='item-img'>";
+            echo "</div>";
+          }
+          elseif($data['image_1'] !== null && $data['image_3'] == null)
+          {
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>1 / 2</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_1']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>2 / 2</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_2']."' class='item-img'>";
+            echo "</div>";
+          }
+          elseif($data['image_1'] !== null && $data['image_4'] == null)
+          {
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>1 / 3</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_1']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>2 / 3</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_2']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>3 / 3</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_3']."' class='item-img'>";
+            echo "</div>";
+          }
+          elseif($data['image_1'] !== null && $data['image_5'] == null)
+          {
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>1 / 4</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_1']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>2 / 4</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_2']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>3 / 4</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_3']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>4 / 4</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_4']."' class='item-img'>";
+            echo "</div>";
+          }
+          elseif($data['image_1'] !== null && $data['image_6'] == null)
+          {
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>1 / 5</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_1']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>2 / 5</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_2']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>3 / 5</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_3']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>4 / 5</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_4']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>5 / 5</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_5']."' class='item-img'>";
+            echo "</div>";
+          }
+          elseif($data['image_1'] !== null && $data['image_7'] == null)
+          {
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>1 / 6</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_1']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>2 / 6</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_2']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>3 / 6</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_3']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>4 / 6</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_4']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>5 / 6</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_5']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>6 / 6</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_6']."' class='item-img'>";
+            echo "</div>";
+          }
+          elseif($data['image_1'] !== null && $data['image_8'] == null)
+          {
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>1 / 7</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_1']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>2 / 7</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_2']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>3 / 7</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_3']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>4 / 7</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_4']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>5 / 7</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_5']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>6 / 7</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_6']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>7 / 7</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_7']."' class='item-img'>";
+            echo "</div>";
+          }
+          elseif($data['image_1'] !== null && $data['image_9'] == null)
+          {
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>1 / 8</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_1']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>2 / 8</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_2']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>3 / 8</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_3']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>4 / 8</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_4']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>5 / 8</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_5']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>6 / 8</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_6']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>7 / 8</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_7']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>8 / 8</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_8']."' class='item-img'>";
+            echo "</div>";
+          }
+          elseif($data['image_1'] !== null && $data['image_10'] == null)
+          {
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>1 / 9</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_1']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>2 / 9</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_2']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>3 / 9</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_3']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>4 / 9</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_4']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>5 / 9</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_5']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>6 / 9</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_6']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>7 / 9</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_7']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>8 / 9</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_8']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>9 / 9</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_9']."' class='item-img'>";
+            echo "</div>";
+          }
+          elseif($data['image_1'] !== null && $data['image_10'] !== null)
+          {
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>1 / 10</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_1']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>2 / 10</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_2']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>3 / 10</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_3']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>4 / 10</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_4']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>5 / 10</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_5']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>6 / 10</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_6']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>7 / 10</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_7']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>8 / 10</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_8']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>9 / 10</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_9']."' class='item-img'>";
+            echo "</div>";
+            echo "<div class='mySlides'>";
+              echo "<div class='numbertext'>10 / 10</div>";
+              echo "<img src='".url('/storage/image').'/'.$data['image_10']."' class='item-img'>";
+            echo "</div>";
+          }
+          ?>
         <!-- Next and previous buttons -->
         <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
         <a class="next" onclick="plusSlides(1)">&#10095;</a>
         <div class="dropdown-divider"></div>
         <!-- Thumbnail images -->
         <div style="width: 500px;">
-          @if($show->main_pictures == true)
-          <div class="column">
-            <img class="demo cursor" src="{{asset($show->main_pictures)}}" style="width:100%" onclick="currentSlide(1)" alt="The Woods">
-          </div>
-          @endif
-          @if($show->second_pictures == true)
-          <div class="column">
-            <img class="demo cursor" src="{{asset($show->second_pictures)}}" style="width:100%" onclick="currentSlide(2)" alt="Cinque Terre">
-          </div>
-          @endif
-          @if($show->three_pictures == true)
-          <div class="column">
-            <img class="demo cursor" src="{{asset($show->three_pictures)}}" style="width:100%" onclick="currentSlide(3)" alt="Mountains and fjords">
-          </div>
-          @endif
-          @if($show->fourth_pictures == true)
-          <div class="column">
-            <img class="demo cursor" src="{{asset($show->fourth_pictures)}}" style="width:100%" onclick="currentSlide(4)" alt="Northern Lights">
-          </div>
-          @endif
-          @if($show->five_pictures == true)
-          <div class="column">
-            <img class="demo cursor" src="{{asset($show->five_pictures)}}" style="width:100%" onclick="currentSlide(5)" alt="Nature and sunrise">
-          </div>
-          @endif
+        <?php  $data = json_decode($show->main_pictures, true);
+          if($data['image_1'] !== null && $data['image_2'] == null)
+          {
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_1']."' style='width:100%' onclick='currentSlide(1)' alt='Images'>";
+            echo "</div>";
+          }
+          elseif($data['image_1'] !== null && $data['image_3'] == null)
+          {
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_1']."' style='width:100%' onclick='currentSlide(1)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_2']."' style='width:100%' onclick='currentSlide(1)' alt='Images'>";
+            echo "</div>";
+          }
+          elseif($data['image_1'] !== null && $data['image_4'] == null)
+          {
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_1']."' style='width:100%' onclick='currentSlide(1)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_2']."' style='width:100%' onclick='currentSlide(2)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_3']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+          }
+          elseif($data['image_1'] !== null && $data['image_5'] == null)
+          {
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_1']."' style='width:100%' onclick='currentSlide(1)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_2']."' style='width:100%' onclick='currentSlide(2)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_3']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_4']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+          }
+          elseif($data['image_1'] !== null && $data['image_6'] == null)
+          {
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_1']."' style='width:100%' onclick='currentSlide(1)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_2']."' style='width:100%' onclick='currentSlide(2)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_3']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_4']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_5']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+          }
+          elseif($data['image_1'] !== null && $data['image_7'] == null)
+          {
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_1']."' style='width:100%' onclick='currentSlide(1)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_2']."' style='width:100%' onclick='currentSlide(2)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_3']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_4']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_5']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_6']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+          }
+          elseif($data['image_1'] !== null && $data['image_8'] == null)
+          {
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_1']."' style='width:100%' onclick='currentSlide(1)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_2']."' style='width:100%' onclick='currentSlide(2)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_3']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_4']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_5']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_6']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_7']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+          }
+          elseif($data['image_1'] !== null && $data['image_9'] == null)
+          {
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_1']."' style='width:100%' onclick='currentSlide(1)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_2']."' style='width:100%' onclick='currentSlide(2)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_3']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_4']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_5']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_6']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_7']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_8']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+          }
+          elseif($data['image_1'] !== null && $data['image_10'] == null)
+          {
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_1']."' style='width:100%' onclick='currentSlide(1)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_2']."' style='width:100%' onclick='currentSlide(2)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_3']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_4']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_5']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_6']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_7']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_8']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_9']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+          }
+          elseif($data['image_1'] !== null && $data['image_10'] !== null)
+          {
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_1']."' style='width:100%' onclick='currentSlide(1)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_2']."' style='width:100%' onclick='currentSlide(2)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_3']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_4']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_5']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_6']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_7']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_8']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_9']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+            echo "<div class='column'>";
+              echo "<img class='demo cursor' src='".url('storage/image').'/'.$data['image_10']."' style='width:100%' onclick='currentSlide(3)' alt='Images'>";
+            echo "</div>";
+          }
+          ?>
         </div>
       </div>
     </div>{{--./col-xl-5 float-left--}}
@@ -123,7 +517,7 @@ max-height: 300px;cursor: zoom-in;transition: 2s all ease-in-out;}
       </p>
       <input type="hidden" name="buy_products" value="{{$show->id}}">
       <p><button class="btn btn-outline-danger" name="added" style="padding: 10px;border-radius: 0;"><i class="fas fa-cart-plus"></i>Add To Cart</button>
-      <button type="submit" class="btn btn-danger" name="buy" style="padding: 10px;border-radius: 0;">Buy Now</button></p>
+      <button type="submit" class="btn btn-danger" style="padding: 10px;border-radius: 0;">Buy Now</button></p>
     </form>
     <p><span style="padding-right: 37px;color: #757575;">Share</span>
     <button class="btn btn-outline-primary social-btn"><i class="fab fa-facebook icon-sosial"></i><span class="span-social">Facebook</span></button>
@@ -134,7 +528,22 @@ max-height: 300px;cursor: zoom-in;transition: 2s all ease-in-out;}
 </div>
 </div>{{--./col-xl-7 float-left card--}}
 </div>
-<div class="col-md-12 card">
+
+<div class="row match-height" style="margin-top: 17px;">
+<div class="col-xl-8 card">
+<div class="card-header" style="text-decoration: underline;font-family: 'Pangolin', cursive;font-size: 20px;font-weight: bolder;background-color: white;padding: 10px;">Description Products</div>
+<div class="card-body" id="test">
+  {{$show->description_products}}
+</div>
+</div>
+<div class="col-xl-4">
+<div class="card-header" style="text-decoration: underline;font-family: 'Pangolin', cursive;font-size: 20px;font-weight: bolder;background-color: white;padding: 10px;">Details Products</div>
+<div class="card-body">
+  
+</div>
+</div>
+</div>
+<div class="col-md-12 row card">
 <div class="card-body" style="font-family: 'Cuprum-Bold';">
 <div>
   @php
@@ -160,21 +569,7 @@ max-height: 300px;cursor: zoom-in;transition: 2s all ease-in-out;}
 </div>
 </div>
 </div>
-<div class="row match-height" style="margin-top: 17px;">
-<div class="col-xl-8 card">
-<div class="card-header" style="text-decoration: underline;font-family: 'Pangolin', cursive;font-size: 20px;font-weight: bolder;background-color: white;padding: 10px;">Description Products</div>
-<div class="card-body">
-  {{$show->description_products}}
-</div>
-</div>
-<div class="col-xl-4">
-<div class="card-header" style="text-decoration: underline;font-family: 'Pangolin', cursive;font-size: 20px;font-weight: bolder;background-color: white;padding: 10px;">Details Products</div>
-<div class="card-body">
-  
-</div>
-</div>
-</div>
-<div class="col-xl-12 float-left" style="margin-top: 10px;background: #d8d8d8;padding: 0;">
+<div class="col-xl-12 float-left row" style="margin-top: 10px;background: #d8d8d8;padding: 0;">
 <div class="card-header">
 <h5 class="card-title" style="text-decoration: underline;font-family: 'Pangolin', cursive;font-weight: bolder;">Comment</h5>
 <a class="heading-elements-toggle"><i class="icon-ellipsis font-medium-3"></i></a>
@@ -350,9 +745,12 @@ max-height: 300px;cursor: zoom-in;transition: 2s all ease-in-out;}
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
       });//end setup
-      $('#click').click(function(){
-      $('#displayRef').load('{{ url('/productions/'.$show->id.'/views/ref')}}');
-      });
+      /*$.get("{{url('/admin/api-admin/get/product-data')}}"+'/'+"{{$show->id}}", function(data) {
+        console.log(data.main_pictures);
+        $.each(data.main_pictures, function(index, val) {
+           console.log(val);
+        });
+      });*/
       });
       </script>
       @endsection
