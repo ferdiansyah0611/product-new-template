@@ -11,6 +11,8 @@
 |
 */
 Auth::routes();
+Route::get('/test','Admin\ApiController@test');
+Route::post('/testupload','Admin\ApiController@testUpload');
 Route::get('logins', 'AuthController@index');
 Route::post('post-login', 'AuthController@postLogin'); 
 Route::get('registrations', 'AuthController@registration');
@@ -36,15 +38,7 @@ Route::group(['prefix'=>'message','as'=>'messages.'], function(){
  });
 //Productions page
 Route::group(['production'=>'production','as'=>'productions.'], function(){
-     Route::get('/productions/manage/{production}/edit/{any}', 'ProductionController@edit')->name('edit');
-     Route::post('/productions/update/{production}', 'ProductionController@update')->name('update');
-     Route::delete('/productions/destroy/{production}', 'ProductionController@destroy')->name('destroy');
-     Route::get('/productions/manage', 'ProductionController@manage')->name('manage');
      Route::get('/productions/views/{slug}', 'ProductionController@show2')->name('show');
-     	Route::get('/productions/{production}/views/ref', 'ProductionController@showRef')->name('showRef');
-     Route::get('/productions/{production}/views/filtering-data', 'ProductionController@filtering_question')->name('filtering_star');
-     Route::get('/productions/for', 'ProductionController@search')->name('search');
-     Route::get('/productions/manage/for', 'ProductionController@search_manage')->name('searchmanage');
      Route::get('/productions/draft-products', 'ProductionController@draft')->name('draft');
      Route::post('/productions/questions', 'ProductionController@save_question')->name('question');
      Route::delete('/productions/questions/delete/{question}', 'ProductionController@delete_question')->name('delete');
@@ -53,14 +47,7 @@ Route::group(['production'=>'production','as'=>'productions.'], function(){
      Route::post('/productions/buy/{production}', 'ProductionController@buy')->name('buy');
      Route::post('/productions/isisaldo', 'ProductionController@isi_saldo')->name('isisaldo');
      Route::get('/productions/top-up', 'ProductionController@topup')->name('topup');
-     Route::get('/productions/request-for-my-product', 'ProductionController@view_request_products')->name('request');
-     Route::get('/productions/my-cart', 'ProductionController@view_cart')->name('viewcart');
      Route::get('/productions/payment', 'ProductionController@cardPay')->name('payment');
-
-     //API
-     Route::get('/productionsAPI', 'ProductionController@manageProductionAPI')->name('product_api');
-     Route::get('/productions/{id}/edit', 'ProductionController@dataProductionAPI')->name('product_edit');
-     Route::post('/productions/update', 'ProductionController@updateProductionAPI')->name('product_update');
  });
 //Profile page
 Route::group(['profiles'=>'profiles','as'=>'profile.'], function(){
@@ -144,20 +131,27 @@ Route::group(['prefix'=>'api-get','as'=>'apiget.'],function(){
      Route::get('/my-pay/management','Api\ApiUsersController@payManage')->name('pro_payManage');
 });
 Route::group(['prefix'=>'admin','as'=>'admin.'],function(){
-     Route::group(['prefix'=>'api-admin'],function(){
+     Route::group(['prefix'=>'api-admin','as'=>'api.'],function(){
           //api get
-          Route::get('/get/apitop-dashboards', 'Admin\ApiController@TopDashboard')->name('api_topdashboards');
-          Route::get('/get/product-manage', 'Admin\ApiController@productManage')->name('api_productmanage');
-          Route::get('/get/users-manage', 'Admin\ApiController@usersManage')->name('api_usersmanage');
-          Route::get('/get/category-manage', 'Admin\ApiController@DataCategory')->name('api_categorymanage');
-          Route::get('/get/user-data/{id}', 'Admin\ApiController@GetUser')->name('api_getuser');
-          Route::get('/get/product-data/{id}', 'Admin\ApiController@GetProduct')->name('api_getproduct');
+          Route::get('/get/apitop-dashboards', 'Admin\ApiController@TopDashboard')->name('topdashboards');
+          Route::get('/get/product-manage', 'Admin\ApiController@productManage')->name('productmanage');
+          Route::get('/get/users-manage', 'Admin\ApiController@usersManage')->name('usersmanage');
+          Route::get('/get/category-manage', 'Admin\ApiController@DataCategory')->name('categorymanage');
+          Route::get('/get/user-data/{id}', 'Admin\ApiController@GetUser')->name('getuser');
+          Route::get('/get/product-data/{id}', 'Admin\ApiController@GetProduct')->name('getproduct');
+          Route::get('/get/file', 'Admin\ApiController@DataFile')->name('fileimage');
+          Route::get('/get/file/image', 'Admin\ApiController@FileImageGet')->name('getimage');
+          Route::get('/get/category', 'Admin\ApiController@GetCategory')->name('getcategory');
+          Route::get('/get/category/merk/data/{id}', 'Admin\ApiController@GetObjectDataMerk')->name('getcategorydatamerk');
+          Route::get('/get/category/{id}', 'Admin\ApiController@GetObjectDataID')->name('getcategorydataid');
+          Route::get('/get/category/{name}', 'Admin\ApiController@GetObjectData')->name('getcategorydata');
+          Route::get('/get/category/{name}/{series}', 'Admin\ApiController@GetObjectDataFull')->name('getcategorydatafull');
           //api post
-          Route::post('/post/users-update', 'Admin\ApiController@UpdateUser')->name('api_userupdate');
-          Route::post('/post/category-new-data','Admin\ApiController@CreateDataCategory')->name('api_categorycreatedata');
+          Route::post('/post/users-update', 'Admin\ApiController@UpdateUser')->name('userupdate');
+          Route::post('/post/category-new-data','Admin\ApiController@CreateDataCategory')->name('categorycreatedata');
           Route::post('/post/category-update/{category}','Admin\ApiController@UpdateCategory')->name('api_updatecategory');
-          Route::post('/post/product-update','Admin\ApiController@UpdateProduction')->name('api_updateproduct');
-          Route::post('/post/saldo-new-data','Admin\ApiController@CreateDataSaldo')->name('api_createdatasaldo');
+          Route::post('/post/product-update','Admin\ApiController@UpdateProduction')->name('updateproduct');
+          Route::post('/post/saldo-new-data','Admin\ApiController@CreateDataSaldo')->name('createdatasaldo');
           Route::delete('/post/users-delete/{id}', 'Admin\ApiController@DeleteUser')->name('api_userdelete');
           Route::delete('/post/category-delete/{id}', 'Admin\ApiController@DeleteCategory')->name('api_deletecategory');
           Route::delete('/post/product-delete/{id}', 'Admin\ApiController@DeleteProduct')->name('api_deleteproduct');
@@ -169,17 +163,27 @@ Route::group(['prefix'=>'admin','as'=>'admin.'],function(){
           Route::post('/post/create-saldo', 'Admin\RequestController@CreateRequestSaldo')->name('createsaldo');
           Route::post('/post/create-newseed', 'Admin\RequestController@CreateRequestNewseed')->name('createnewseed');
           Route::delete('/post/delete-newseed', 'Admin\RequestController@NewseedDelete')->name('deletenewseed');
+          /*Route::post('/post/create-product', 'Admin\RequestController@CreateDataProduct')->name('createproduct');*/
           Route::post('/post/create-product', 'Admin\RequestController@CreateDataProduct')->name('createproduct');
+          Route::post('/post/create-object','Admin\RequestController@CreateDataObject')->name('createobject');
+          Route::post('/post/create-merk','Admin\RequestController@CreateDataMerk')->name('createmerk');
      });
      //view
      Route::get('/search','Admin\ApiController@SearchData')->name('searchdata');
      Route::get('/dashboards','Admin\ViewController@DashboardIndex')->name('dashboardindex');
+     Route::get('/create-object','Admin\ViewController@CreateObject')->name('create_object');
+          //management
      Route::get('/users-management', 'Admin\ViewController@UsersManagement')->name('users_management');
      Route::get('/product-management', 'Admin\ViewController@ProductManagement')->name('products_management');
      Route::get('/database-management', 'Admin\ViewController@DatabaseManagement')->name('database_management');
-     
+          //cart
+     Route::get('/cart', 'Admin\ViewController@CartIndex')->name('cartindex');
      Route::group(['prefix'=>'product'],function(){
           Route::get('/create', 'Admin\ViewController@createProduct')->name('product_create');
+          Route::get('/request', 'Admin\ViewController@RequestProducts')->name('product_request');
+     });
+     Route::group(['prefix'=>'newseed'],function(){
+          Route::get('/create', 'Admin\ViewController@CreateNewseed')->name('newseed.create');
      });
 });
 
@@ -194,6 +198,8 @@ Route::group(['prefix'=>'member','as'=>'member.'],function(){
 });
 
 Route::get('/searching', 'HomeController@searching');
+Route::get('/searching-users', 'HomeController@searchuser');
+Route::get('/searching-product', 'HomeController@searchproduct');
 Route::get('/documentation', 'HomeController@spa');
 Route::get('/template', 'HomeController@templates');
 Route::get('redirect/{driver}', 'AuthController@redirectToProvider')->name('login.provider');
