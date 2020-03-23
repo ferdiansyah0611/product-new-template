@@ -16,8 +16,9 @@ class CreateSessionLoginsTable extends Migration
         Schema::create('session_logins', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->longText('user_id');
+            $table->longText('device');
             $table->date('on');
-            $table->date('logout');
+            $table->date('logout')->nullable();
             $table->timestamps();
         });
     }

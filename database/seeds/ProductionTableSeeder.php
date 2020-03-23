@@ -15,9 +15,9 @@ class ProductionTableSeeder extends Seeder
      */
     public function run()
     {
-        for ($i=1; $i < 1000000; $i++) {
+        for ($i=1; $i < 10001; $i++) {
             DB::table('productions')->insert([
-            'user_id' => '3711268',
+            'user_id' => '8239137',
             'title' => 'product '.rand(100000000,1000000000),
             'name_products' => 'product-'.rand(100000000,1000000000),
             'price' => rand(999, 1000000),
@@ -26,7 +26,7 @@ class ProductionTableSeeder extends Seeder
             'description_products' => 'description '.rand(100000000,1000000000),
             'remaining_products' => rand(100, 10000),
             'main_pictures' => '{"image_1":"img1_Screenshot(28).png","image_2":"img1_Screenshot(28).png","image_3":"IMG-20200101-WA0017.jpg","image_4":null,"image_5":null,"image_6":null,"image_7":null,"image_8":null,"image_9":null,"image_10":null}',
-            'category_products' => 'SSD',
+            'category_products' => 'Router',
             'status' => 'Public',
             'profits' => rand(1000, 5000),
             'me' => rand(999, 10000),

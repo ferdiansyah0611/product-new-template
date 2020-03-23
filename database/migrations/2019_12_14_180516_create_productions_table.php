@@ -27,6 +27,8 @@ class CreateProductionsTable extends Migration
             $table->string('fourth_pictures')->nullable();
             $table->string('five_pictures')->nullable();
             $table->string('category_products')->nullable();
+            $table->bigInteger('discount')->nullable();
+            $table->string('conditions')->nullable();
             $table->bigInteger('sold_out')->nullable();
             $table->bigInteger('profits')->nullable();
             $table->bigInteger('me')->nullable();
