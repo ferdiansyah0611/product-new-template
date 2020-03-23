@@ -11,19 +11,19 @@
 |
 */
 Auth::routes();
-Route::get('/test','Admin\ApiController@test');
-Route::post('/testupload','Admin\ApiController@testUpload');
-Route::get('logins', 'AuthController@index');
-Route::post('post-login', 'AuthController@postLogin'); 
-Route::get('registrations', 'AuthController@registration');
-Route::post('post-registration', 'AuthController@postRegistration');
-Route::get('logout2', 'AuthController@logouts')->name('log');
-Route::get('/', 'HomeController@index')->name('index');
-Route::get('/home', 'ProductionController@index')->name('home');
+     Route::get('/test','Admin\ApiController@test');
+     Route::post('/testupload','Admin\ApiController@testUpload');
+     Route::get('logins', 'AuthController@index');
+     Route::post('post-login', 'AuthController@postLogin'); 
+     Route::get('registrations', 'AuthController@registration');
+     Route::post('post-registration', 'AuthController@postRegistration');
+     Route::get('logout2', 'AuthController@logouts')->name('log');
+     Route::get('/', 'HomeController@index')->name('index');
+     Route::get('/home', 'ProductionController@index')->name('home');
 
+Route::get('/spa', 'HomeController@spa');
+Route::get('/gett','HomeController@GetPorduct');
 
-Route::get('/templates/notifAll', 'DashboardController@notifAll');
-Route::get('/templates/notifMessages', 'DashboardController@notifMessages');
 //Messages page
 Route::group(['prefix'=>'message','as'=>'messages.'], function(){
      Route::get('/archives', 'MessagesController@archive')->name('archived');
@@ -35,6 +35,12 @@ Route::group(['prefix'=>'message','as'=>'messages.'], function(){
      Route::post('/readdata/{messages}', 'MessagesController@read_message')->name('read');
      Route::post('messages/savedata', 'MessagesController@store')->name('store');
      Route::post('/beforeread/{messages}', 'MessagesController@before_message')->name('before');
+
+     Route::group(['prefix'=>'api','as'=>'api.'],function(){
+          Route::get('/notification','MessagesController@NotificationGet');
+          Route::get('/message','MessagesController@MessageGet');
+          Route::post('/notification/read','MessagesController@NotificationRead');
+     });
  });
 //Productions page
 Route::group(['production'=>'production','as'=>'productions.'], function(){
@@ -124,18 +130,13 @@ Route::group(['prefix'=>'newseed','as'=>'newseeds.'], function(){
      Route::get('/component/create', 'DashboardController@newseedcreateCOMP')->name('compCreate');
  });
 
-Route::group(['prefix'=>'api-get','as'=>'apiget.'],function(){
-     Route::get('/product/management','Api\ApiAdminController@productManage')->name('admin_productManage');
-     Route::get('/users/management','Api\ApiAdminController@usersManage')->name('admin_usersManage');
-     Route::get('/my-product/management','Api\ApiUsersController@productManage')->name('pro_productManage');
-     Route::get('/my-pay/management','Api\ApiUsersController@payManage')->name('pro_payManage');
-});
 Route::group(['prefix'=>'admin','as'=>'admin.'],function(){
      Route::group(['prefix'=>'api-admin','as'=>'api.'],function(){
           //api get
           Route::get('/get/apitop-dashboards', 'Admin\ApiController@TopDashboard')->name('topdashboards');
           Route::get('/get/product-manage', 'Admin\ApiController@productManage')->name('productmanage');
           Route::get('/get/users-manage', 'Admin\ApiController@usersManage')->name('usersmanage');
+          Route::get('/get/purchase-manage', 'Admin\ApiController@purchaseManage')->name('purchasemanage');
           Route::get('/get/category-manage', 'Admin\ApiController@DataCategory')->name('categorymanage');
           Route::get('/get/user-data/{id}', 'Admin\ApiController@GetUser')->name('getuser');
           Route::get('/get/product-data/{id}', 'Admin\ApiController@GetProduct')->name('getproduct');
@@ -143,7 +144,7 @@ Route::group(['prefix'=>'admin','as'=>'admin.'],function(){
           Route::get('/get/file/image', 'Admin\ApiController@FileImageGet')->name('getimage');
           Route::get('/get/category', 'Admin\ApiController@GetCategory')->name('getcategory');
           Route::get('/get/category/merk/data/{id}', 'Admin\ApiController@GetObjectDataMerk')->name('getcategorydatamerk');
-          Route::get('/get/category/{id}', 'Admin\ApiController@GetObjectDataID')->name('getcategorydataid');
+          /*Route::get('/get/category/{id}', 'Admin\ApiController@GetObjectDataID')->name('getcategorydataid');*/
           Route::get('/get/category/{name}', 'Admin\ApiController@GetObjectData')->name('getcategorydata');
           Route::get('/get/category/{name}/{series}', 'Admin\ApiController@GetObjectDataFull')->name('getcategorydatafull');
           //api post
@@ -188,13 +189,28 @@ Route::group(['prefix'=>'admin','as'=>'admin.'],function(){
 });
 
 Route::group(['prefix'=>'member','as'=>'member.'],function(){
-     Route::group(['prefix'=>'api-member'],function(){
+     Route::group(['prefix'=>'api-member','as'=>'api.'],function(){
           //api post
-          Route::get('/get/product-manage', 'Member\ApiController@productManage')->name('api_productmanage');
+          Route::get('/get/product-manage', 'Member\ApiController@productManage')->name('productmanage');
+          Route::get('/get/file/image', 'Member\ApiController@FileImageGet')->name('getimage');
      });
      //view
+     Route::group(['prefix'=>'product'],function(){
+          Route::get('/create', 'Member\ViewController@createProduct')->name('product_create');
+          Route::get('/request', 'Member\ViewController@RequestProducts')->name('product_request');
+     });
      Route::get('/dashboards','Member\ViewController@DashboardIndex')->name('dashboardindex');
      Route::get('/product-management', 'Member\ViewController@ProductManagement')->name('products_management');
+});
+
+
+/*task*/
+Route::group(['prefix'=>'task','as'=>'task.'],function(){
+     Route::get('/', 'User\ViewController@TaskIndex');
+     Route::get('/data/{name}', 'User\ApiController@DataTask');
+     Route::get('/get/data/{id}','User\ApiController@DataTaskTitle');
+     Route::post('/create', 'User\RequestController@CreateDataTask');
+     Route::delete('/delete/{id}', 'User\RequestController@DeleteDataTask');
 });
 
 Route::get('/searching', 'HomeController@searching');
