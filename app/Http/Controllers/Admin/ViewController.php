@@ -135,7 +135,7 @@ class ViewController extends Controller
             $production = Production::all();
             $data_product_user = Production::where('user_id', Auth()->user()->id)->get();
             return view('home.production.request', compact('title', 'production'), ['product_user' => $data_product_user]);
-        }
+    }
     //cart
     public function CartIndex()
     {

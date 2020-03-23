@@ -522,50 +522,66 @@ class ProductionController extends Controller
             $count  = Auth()->user()->saldo - $total;
             $me     = (2/100)*$total;
             $product = DB::table('productions')->where('id', $production->id)->get();
-            if(Auth()->user()->saldo < $count){
-                return back();
+            if(Auth()->user()->saldo < $count)
+            {
+                return redirect()->back();
             }
-            if(Auth()->user()->saldo > $count){
-                foreach($product as $prod){
-                $id_purchases = $this->random;
-                DB::table('purchases')->insert([
-                'id' => $id_purchases,
-                'production_id' => $production->id,
-                'purchase_id' => $purchases,
-                'user_id' => Auth()->user()->id,
-                'price' => $request->price,
-                'sum_purchase' => $request->remaining,
-                'totals' => $total,
-                'profits' => $prod->profits * $request->remaining,
-                'me' => $me,
-                'status' => 'Pending',
-                'locate' => Auth()->user()->locate,
-                'month' => Carbon::now()->get('month'),
-                'year' => Carbon::now()->get('year'),
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-                ]);
+            elseif(Auth()->user()->saldo < '0')
+            {
+                return redirect()->back()->with('success','Your Saldo Not Different');
+            }
+            elseif(Auth()->user()->saldo > $count)
+            {
+                foreach($product as $prod)
+                {
+                    if(Auth()->user()->id == $prod->user_id)
+                    {
+                        return redirect()->back()->with('error',"Sorry this is your product can't to buy");
+                    }
+                    else
+                    {
+                        $id_purchases = $this->random;
+                        DB::table('purchases')->insert([
+                            'id' => $id_purchases,
+                            'production_id' => $production->id,
+                            'purchase_id' => $purchases,
+                            'user_id' => Auth()->user()->id,
+                            'production_user_id' => $prod->user_id,
+                            'price' => $request->price,
+                            'sum_purchase' => $request->remaining,
+                            'totals' => $total,
+                            'profits' => $prod->profits * $request->remaining,
+                            'me' => $me,
+                            'status' => 'Pending',
+                            'locate' => Auth()->user()->locate,
+                            'month' => Carbon::now()->get('month'),
+                            'year' => Carbon::now()->get('year'),
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now(),
+                        ]);
+                        DB::table('notifications')->insert([
+                            'user_id' => Auth()->user()->id,
+                            'name' => Auth()->user()->name,
+                            'email_to' => Auth()->user()->email,
+                            'status' => '0',
+                            'to' => 'purchases',
+                            'notification' => 'Your has been buy products with id purchases '.$id_purchases,
+                            'created_at' => Carbon::now(),
+                        ]);
+                        User::where('id', Auth()->user()->id)->update([
+                            'saldo' => $count,
+                            ]);
+                        DB::table('productions')->where('id', $prod->id)->update([
+                            'remaining_products' => $remain,
+                            'sold_out' => $pro->sold_out + $request->remaining,
+                        ]);
+                        return redirect()->back()->with('success', 'Your has been buy products with ID Purchase '.$purchases);
+                    }///else
                 }
-                DB::table('notifications')->insert([
-                'user_id' => Auth()->user()->id,
-                'name' => Auth()->user()->name,
-                'email_to' => Auth()->user()->email,
-                'status' => '0',
-                'to' => 'purchases',
-                'notification' => 'Your has been buy products with id purchases '.$id_purchases,
-                'created_at' => Carbon::now(),
-            ]);
-            foreach($product as $pro){
-                DB::table('productions')->where('id', $pro->id)->update([
-                    'remaining_products' => $remain,
-                    'sold_out' => $pro->sold_out + $request->remaining,
-                ]);
                 
-            }
-            User::where('id', Auth()->user()->id)->update([
-                'saldo' => $count,
-            ]);
-               return redirect()->back()->with('success', 'Your has been buy products with ID Purchase '.$purchases);
+                
+                
+               
             } 
         }
         public function isi_saldo(Request $request){

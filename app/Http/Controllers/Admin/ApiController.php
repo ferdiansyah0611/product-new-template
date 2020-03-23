@@ -104,14 +104,29 @@ class ApiController extends Controller
     //dashboard
     public function TopDashboard()
     {
-        return array(
-            'data' => array(
-                'my_products' => Production::where('user_id', Auth()->user()->id)->count('count'),
-                'all_users' => DB::table('users')->count('count'),
-                'my_orders' => DB::table('purchases')->where('user_id', Auth()->user()->id)->count(),
-                'my_purchases' => DB::table('purchases')->where('user_id', Auth()->user()->id)->sum('totals'),
-            )
-        );
+        $purchase = DB::table('purchases')->where('user_id', Auth()->user()->id)->sum('totals');
+        if($purchase > 1000000 && $purchase < 999999999)
+            {
+                return array(
+                    'data' => array(
+                        'my_products' => Production::where('user_id', Auth()->user()->id)->count('count'),
+                        'all_users' => DB::table('users')->count('count'),
+                        'my_orders' => DB::table('purchases')->where('user_id', Auth()->user()->id)->count(),
+                        'my_purchases' => round($purchase/1000000).' Juta',
+                    )
+                );
+            }
+            elseif($purchase > 1000000000)
+            {
+                return array(
+                    'data' => array(
+                        'my_products' => Production::where('user_id', Auth()->user()->id)->count('count'),
+                        'all_users' => DB::table('users')->count('count'),
+                        'my_orders' => DB::table('purchases')->where('user_id', Auth()->user()->id)->count(),
+                        'my_purchases' => round($purchase/1000000000).' Miliar',
+                    )
+                );
+            }
     }
     //product
     public function productManage()
@@ -188,9 +203,17 @@ class ApiController extends Controller
         $data = Category::get();
         return response()->json($data);
     }
+    public function GetObjectDataMerk($id)
+    {
+        if($id == true){
+            $data = DB::table('merks')->where('category_id',$id)->get('merk');
+            return response()->json($data);
+        }
+        
+    }
     public function GetObjectDataID($id)
     {
-        $data = DB::table('objects')->where('category_id',$id)->pluck('merk');
+        $data = DB::table('objects')->where('category_id',$id)->get();
         return response()->json($data);
     }
     public function GetObjectData($name)
@@ -286,5 +309,10 @@ class ApiController extends Controller
         return response()->json($data);
         }
         
+    }
+    //purchase
+    public function purchaseManage()
+    {
+        return Datatables::of(Purchase::where('user_id', Auth()->user()->id))->make(true);
     }
 }

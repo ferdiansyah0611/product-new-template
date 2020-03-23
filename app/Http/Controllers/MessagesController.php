@@ -6,6 +6,7 @@ use App;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 //Models
 use App\Models\Cart;
 use App\Models\Category;
@@ -36,7 +37,52 @@ class MessagesController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        //helping
+        $this->random = rand(1000000,10000000);
+        //directory
+        $this->directory_image = storage_path('app/public/image');
+        $this->directory_document = storage_path('app/public/document');
+        $this->directory_video = storage_path('app/public/video');
+        $this->directory_audio = storage_path('app/public/audio');
+        //authenticate
+        $this->auth_id = Auth::user()?Auth::user()->id:null;
+        $this->auth_name = Auth::user()?Auth::user()->name:null;
+        $this->auth_email = Auth::user()?Auth::user()->email:null;
+        $this->auth_languange = Auth::user()?Auth::user()->languange:null;
+        $this->auth_name_store = Auth::user()?Auth::user()->name_store:null;
+        $this->auth_saldo = Auth::user()?Auth::user()->saldo:null;
+        $this->auth_status = Auth::user()?Auth::user()->status:null;
+        $this->auth_last_study = Auth::user()?Auth::user()->last_study:null;
+        $this->auth_identity_card = Auth::user()?Auth::user()->identity_card:null;
+        $this->auth_debit_card = Auth::user()?Auth::user()->debit_card:null;
+        $this->auth_number = Auth::user()?Auth::user()->number:null;
+        $this->auth_born = Auth::user()?Auth::user()->born:null;
+        $this->auth_description = Auth::user()?Auth::user()->description:null;
+        $this->auth_locate = Auth::user()?Auth::user()->locate:null;
+        $this->auth_gender = Auth::user()?Auth::user()->gender:null;
+        $this->auth_avatars = Auth::user()?Auth::user()->avatars:null;
     }
+    //API
+    public function NotificationGet()
+    {
+        $data = Notification::where('email_to', Auth()->user()->email)->where('status','0')->paginate(10);
+        return response()->json($data);
+    }
+    public function MessageGet()
+    {
+        $data = Messages::where('to', Auth()->user()->email)->get();
+        return response()->json($data);
+    }
+
+    public function NotificationRead(Request $request)
+    {
+        Notification::where('email_to', Auth()->user()->email)->where('status','0')->update([
+            'status'    => '1',
+        ]);
+        return response()->json(['success'=>'Berhasil']);
+    }
+
+
     public function index()
     {
         App::setLocale(Auth()->user()->languange);
@@ -61,7 +107,7 @@ class MessagesController extends Controller
     {
         if ($request->has('sendmessages')) {
             DB::table('messages')->insert([
-                'id' => rand(1000000000, 1000000000000),
+                'id' => $this->random,
                 'user_id' => $request->user_id,
                 'from' => $request->from,
                 'to' => $request->to,

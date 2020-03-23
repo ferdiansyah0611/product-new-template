@@ -40,9 +40,6 @@ class HomeController extends Controller
     public function spa(){
         return view('layouts.spa');
     }
-    public function templates(){
-        return view('content');
-    }
 
 
     public function searching(Request $request){
@@ -64,5 +61,10 @@ class HomeController extends Controller
         $search = $request->search;
         $productData = Production::where('title','like',"%".$search."%")->orWhere('category_products','like',"%".$search."%")->orWhere('price','like',"%".$search."%")->paginate(20);
         return response()->json($productData);
+    }
+    public function GetPorduct()
+    {
+        $data = Production::latest()->paginate(25);
+        return response()->json($data);
     }
 }

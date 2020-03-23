@@ -36,8 +36,7 @@ class FileController extends Controller
     public function __construct()
     {
         //middleware
-        $this->middleware(['auth','Pemilik']);
-        $this->middleware(['auth','Premium']);
+        $this->middleware('auth');
         //helping
         $this->random = rand(1000000,10000000);
         //directory
@@ -253,8 +252,7 @@ class FileController extends Controller
             'image' => 'required|max:10000|file|mimes:jpeg,jpg,png,bmp'
         ]);
         $file = $request->file('image');
-        $namefile = "/db/img/".$file->getClientOriginalName();
-        $toupload = 'db/img/';
+        $namefile = $file->getClientOriginalName();
         $file->move($this->directory_image,$namefile);
         
         $dataFile = Files::all();
@@ -291,8 +289,7 @@ class FileController extends Controller
             'video' => 'required|max:100000|file|mimes:3gp,mp4'
         ]);
         $file = $request->file('video');
-        $namefile = "/db/video/".$file->getClientOriginalName();
-        $toupload = 'db/video/';
+        $namefile = .$file->getClientOriginalName();
         $file->move($this->directory_video,$namefile);
         
         $dataFile = Files::all();

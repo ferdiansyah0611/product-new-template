@@ -108,4 +108,20 @@ class ViewController extends Controller
         $usersdata = DB::table('users')->orderBy('created_at', 'DESC')->paginate('9');
         return view('home.dashboard.index', compact('title', 'notification_products', 'user', 'likers'), ['pu' => $purchase, 'users' => $usersdata]);
     }
+    //product
+    public function createProduct()
+    {
+        App::setLocale(Auth()->user()->languange);
+        $title = 'Create Products';
+        $category = Category::latest()->orderBy('name', 'DESC')->get();
+        return view('home.production.create', compact('title', 'category'));
+    }
+    public function RequestProducts()
+    {
+            App::setLocale(Auth()->user()->languange);
+            $title = 'title';
+            $production = Production::all();
+            $data_product_user = Production::where('user_id', Auth()->user()->id)->get();
+            return view('home.production.request', compact('title', 'production'), ['product_user' => $data_product_user]);
+    }
 }

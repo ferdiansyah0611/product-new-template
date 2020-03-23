@@ -81,14 +81,6 @@ class DashboardController extends Controller
                         return $btn;
                     })->rawColumns(['action'])->make(true);
     }
-    public function notifAll(){
-        App::setLocale(Auth()->user()->languange);
-        return view('layouts.component.notifAll');
-    }
-    public function notifMessages(){
-        App::setLocale(Auth()->user()->languange);
-        return view('layouts.component.notifMessages');
-    }
     public function new_category(Request $request){
         DB::table('categories')->insert([
             'name' => $request->name,
